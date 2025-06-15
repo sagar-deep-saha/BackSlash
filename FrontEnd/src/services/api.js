@@ -51,8 +51,8 @@ export const sendMessage = async (message) => {
         console.log('Response data:', response.data);
         
         if (!response.data) {
-            console.error('No response data received');
-            throw new Error('No response data received from server');
+            console.error('No data in response');
+            throw new Error('No data received from server');
         }
         
         if (!response.data.response) {
@@ -60,7 +60,7 @@ export const sendMessage = async (message) => {
             throw new Error('Invalid response format from server');
         }
         
-        console.log('Received valid response from backend:', response.data);
+        console.log('Received response from backend:', response.data);
         return response.data.response;
     } catch (error) {
         console.error('Error in sendMessage:', {
