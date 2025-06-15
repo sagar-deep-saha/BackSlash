@@ -47,16 +47,7 @@ export const sendMessage = async (message) => {
             message: message
         });
         
-        console.log('Raw response from backend:', response);
-        console.log('Response data:', response.data);
-        
-        if (!response.data) {
-            console.error('No data in response');
-            throw new Error('No data received from server');
-        }
-        
-        if (!response.data.response) {
-            console.error('Invalid response format:', response.data);
+        if (!response.data || !response.data.response) {
             throw new Error('Invalid response format from server');
         }
         
@@ -66,8 +57,7 @@ export const sendMessage = async (message) => {
         console.error('Error in sendMessage:', {
             status: error.response?.status,
             data: error.response?.data,
-            message: error.message,
-            error: error
+            message: error.message
         });
         
         if (error.response?.data?.detail) {

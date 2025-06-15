@@ -1,32 +1,55 @@
 // const API_URL = 'http://localhost:8001/api';
-const API_URL = 'https://backslash-twitter-back.vercel.app/api';
+const API_URL = 'https://backslash-twitter-back-xi.vercel.app/api';
 
 export const fetchTweets = async () => {
-  const response = await fetch(`${API_URL}/tweets`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch tweets');
+  try {
+    const response = await fetch(`${API_URL}/tweets`);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || 'Failed to fetch tweets');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching tweets:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const createTweet = async (tweet) => {
-  const response = await fetch(`${API_URL}/tweets`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(tweet),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to create tweet');
+  try {
+    console.log('Creating tweet:', tweet);
+    const response = await fetch(`${API_URL}/tweets`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(tweet),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || 'Failed to create tweet');
+    }
+    
+    const data = await response.json();
+    console.log('Tweet created:', data);
+    return data;
+  } catch (error) {
+    console.error('Error creating tweet:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const fetchUrlContent = async (url) => {
-  const response = await fetch(`${API_URL}/fetch-url?url=${encodeURIComponent(url)}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch URL content');
+  try {
+    const response = await fetch(`${API_URL}/fetch-url?url=${encodeURIComponent(url)}`);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || 'Failed to fetch URL content');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching URL content:', error);
+    throw error;
   }
-  return response.json();
 }; 

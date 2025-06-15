@@ -61,17 +61,13 @@ def send_to_twitterback(content):
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        logger.info(f"Received chat request: {request.message}")
-        
         # Get API URL and key from environment
         api_url = os.getenv("GEMINI_API_URL")
         api_key = os.getenv("GEMINI_API_KEY")
         
         if not api_url or not api_key:
             logger.error("API configuration missing")
-            response = {"response": "Error: API configuration missing"}
-            logger.info(f"Sending response: {response}")
-            return response
+            return {"response": "Error: API configuration missing"}
         
         # Construct the full URL with API key
         full_url = f"{api_url}?key={api_key}"
@@ -86,8 +82,6 @@ async def chat(request: ChatRequest):
             }]
         }
         
-        logger.info("Making request to Gemini API...")
-        
         # Make API request
         response = requests.post(
             full_url,
@@ -97,63 +91,45 @@ async def chat(request: ChatRequest):
             }
         )
         
-        logger.info(f"Gemini API response status: {response.status_code}")
-        
         if response.status_code != 200:
             error_msg = f"Gemini API error: {response.text}"
             logger.error(error_msg)
-            response = {"response": f"Error: {error_msg}"}
-            logger.info(f"Sending response: {response}")
-            return response
+            return {"response": f"Error: {error_msg}"}
         
         try:
             response_data = response.json()
-            logger.info("Successfully parsed Gemini API response")
         except json.JSONDecodeError as e:
             error_msg = f"Failed to parse Gemini API response: {str(e)}"
             logger.error(error_msg)
-            response = {"response": f"Error: {error_msg}"}
-            logger.info(f"Sending response: {response}")
-            return response
+            return {"response": f"Error: {error_msg}"}
         
         if "candidates" not in response_data or not response_data["candidates"]:
             error_msg = "Invalid response from Gemini API: No candidates found"
             logger.error(error_msg)
-            response = {"response": f"Error: {error_msg}"}
-            logger.info(f"Sending response: {response}")
-            return response
+            return {"response": f"Error: {error_msg}"}
         
         try:
             # Extract the response text
             gemini_response = response_data["candidates"][0]["content"]["parts"][0]["text"]
-            logger.info("Successfully extracted response from Gemini API")
         except (KeyError, IndexError) as e:
             error_msg = f"Failed to extract response from Gemini API: {str(e)}"
             logger.error(error_msg)
-            response = {"response": f"Error: {error_msg}"}
-            logger.info(f"Sending response: {response}")
-            return response
+            return {"response": f"Error: {error_msg}"}
         
         # Send to TwitterBack
         tweet = send_to_twitterback(gemini_response)
         
         # Return the response in the expected format
-        response = {"response": gemini_response}
-        logger.info(f"Sending response: {response}")
-        return response
+        return {"response": gemini_response}
             
     except requests.exceptions.RequestException as e:
         error_msg = f"Request failed: {str(e)}"
         logger.error(error_msg)
-        response = {"response": f"Error: {error_msg}"}
-        logger.info(f"Sending response: {response}")
-        return response
+        return {"response": f"Error: {error_msg}"}
     except Exception as e:
         error_msg = f"Unexpected error: {str(e)}"
         logger.error(error_msg)
-        response = {"response": f"Error: {error_msg}"}
-        logger.info(f"Sending response: {response}")
-        return response
+        return {"response": f"Error: {error_msg}"}
 
 if __name__ == "__main__":
     import uvicorn
