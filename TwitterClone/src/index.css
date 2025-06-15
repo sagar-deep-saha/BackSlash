@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-full font-bold transition-colors;
+  }
+  
+  .btn-primary {
+    @apply btn bg-white text-black hover:bg-gray-200;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-[#1d9bf0] text-white hover:bg-[#1a8cd8];
+  }
+  
+  .nav-link {
+    @apply flex items-center gap-4 px-4 py-3 rounded-full hover:bg-gray-900 transition-colors;
+  }
+  
+  .nav-link.active {
+    @apply font-bold;
+  }
+  
+  .tweet-card {
+    @apply p-4 border-b border-gray-800 hover:bg-gray-900/50 transition-colors;
+  }
+  
+  .tweet-input {
+    @apply w-full bg-transparent text-xl outline-none resize-none;
+  }
+  
+  .tweet-actions {
+    @apply flex items-center gap-4 text-gray-500 hover:text-[#1d9bf0] transition-colors;
+  }
+}
