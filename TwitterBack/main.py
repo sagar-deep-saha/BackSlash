@@ -14,7 +14,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",  # FrontEnd
-        "http://localhost:5174"   # TwitterClone
+        "http://localhost:5174",   # TwitterClone
+        "https://backslash-twitter-clone.vercel.app",   # TwitterClone2
     ],
     allow_credentials=True,
     allow_methods=["*"],
