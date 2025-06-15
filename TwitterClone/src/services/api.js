@@ -1,5 +1,5 @@
 // const API_URL = 'http://localhost:8001/api';
-const API_URL = 'backslash-twitter-back.vercel.app/api';
+const API_URL = 'https://backslash-twitter-back.vercel.app/api';
 
 export const fetchTweets = async () => {
   const response = await fetch(`${API_URL}/tweets`);

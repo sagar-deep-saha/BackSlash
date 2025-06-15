@@ -16,6 +16,7 @@ app.add_middleware(
         "http://localhost:5173",  # FrontEnd
         "http://localhost:5174",   # TwitterClone
         "https://backslash-twitter-clone.vercel.app",   # TwitterClone2
+        "https://backslash-twitter-back.vercel.app"   # TwitterClone2
     ],
     allow_credentials=True,
     allow_methods=["*"],
