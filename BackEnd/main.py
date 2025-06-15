@@ -145,4 +145,5 @@ async def chat(request: ChatRequest):
 if __name__ == "__main__":
     import uvicorn
     # uvicorn.run(app, host="127.0.0.1", port=8000) 
-    uvicorn.run(app, host="https://backslash-backend.vercel.app/", port=8000) 
+    # uvicorn.run(app, host="https://backslash-backend.vercel.app", port=8000)
+    uvicorn.run(app)
