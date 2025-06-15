@@ -67,11 +67,10 @@ async def chat(request: ChatRequest):
         
         if not api_url or not api_key:
             logger.error("API configuration missing")
-            return ChatResponse(response="Error: API configuration missing")
+            return {"response": "Error: API configuration missing"}
         
         # Construct the full URL with API key
         full_url = f"{api_url}?key={api_key}"
-        logger.info(f"Full URL: {full_url}")
         
         # Prepare the request payload
         payload = {
@@ -83,8 +82,6 @@ async def chat(request: ChatRequest):
             }]
         }
         
-        logger.info(f"Sending request to Gemini API: {json.dumps(payload, indent=2)}")
-        
         # Make API request
         response = requests.post(
             full_url,
@@ -94,26 +91,22 @@ async def chat(request: ChatRequest):
             }
         )
         
-        logger.info(f"Gemini API Response Status: {response.status_code}")
-        logger.info(f"Gemini API Response Headers: {dict(response.headers)}")
-        logger.info(f"Gemini API Response: {response.text}")
-        
         if response.status_code != 200:
             error_msg = f"Gemini API error: {response.text}"
             logger.error(error_msg)
-            return ChatResponse(response=f"Error: {error_msg}")
+            return {"response": f"Error: {error_msg}"}
         
         try:
             response_data = response.json()
         except json.JSONDecodeError as e:
             error_msg = f"Failed to parse Gemini API response: {str(e)}"
             logger.error(error_msg)
-            return ChatResponse(response=f"Error: {error_msg}")
+            return {"response": f"Error: {error_msg}"}
         
         if "candidates" not in response_data or not response_data["candidates"]:
             error_msg = "Invalid response from Gemini API: No candidates found"
             logger.error(error_msg)
-            return ChatResponse(response=f"Error: {error_msg}")
+            return {"response": f"Error: {error_msg}"}
         
         try:
             # Extract the response text
@@ -121,22 +114,22 @@ async def chat(request: ChatRequest):
         except (KeyError, IndexError) as e:
             error_msg = f"Failed to extract response from Gemini API: {str(e)}"
             logger.error(error_msg)
-            return ChatResponse(response=f"Error: {error_msg}")
+            return {"response": f"Error: {error_msg}"}
         
         # Send to TwitterBack
         tweet = send_to_twitterback(gemini_response)
         
-        # Return the response
-        return ChatResponse(response=gemini_response)
+        # Return the response in the expected format
+        return {"response": gemini_response}
             
     except requests.exceptions.RequestException as e:
         error_msg = f"Request failed: {str(e)}"
         logger.error(error_msg)
-        return ChatResponse(response=f"Error: {error_msg}")
+        return {"response": f"Error: {error_msg}"}
     except Exception as e:
         error_msg = f"Unexpected error: {str(e)}"
         logger.error(error_msg)
-        return ChatResponse(response=f"Error: {error_msg}")
+        return {"response": f"Error: {error_msg}"}
 
 if __name__ == "__main__":
     import uvicorn
