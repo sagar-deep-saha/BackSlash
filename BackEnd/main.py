@@ -21,7 +21,12 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Frontend URL
+    allow_origins=[
+        "http://localhost:5173",  # FrontEnd
+        "http://localhost:5174",   # TwitterClone
+        "https://backslash-front.vercel.app",   # TwitterClone2
+        "https://backslash-front.vercel.app"   # TwitterClone2
+    ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
@@ -46,7 +51,8 @@ def send_to_twitterback(content):
         "replies": 0
     }
     try:
-        resp = requests.post("http://localhost:8001/api/tweets", json=tweet)
+        # resp = requests.post("http://localhost:8001/api/tweets", json=tweet)
+        resp = requests.post("https://backslash-twitter-back.vercel.app/api/tweets", json=tweet)
         resp.raise_for_status()
         return resp.json()
     except Exception as e:
@@ -138,4 +144,5 @@ async def chat(request: ChatRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000) 
+    # uvicorn.run(app, host="127.0.0.1", port=8000) 
+    uvicorn.run(app, host="https://backslash-backend.vercel.app/", port=8000) 
