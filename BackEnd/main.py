@@ -24,8 +24,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",  # FrontEnd
         "http://localhost:5174",   # TwitterClone
-        "https://backslash-front.vercel.app",   # TwitterClone2
-        "https://backslash-front.vercel.app"   # TwitterClone2
+        "https://backslash-front.vercel.app"   # Production Frontend
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
@@ -66,12 +65,9 @@ async def chat(request: ChatRequest):
         api_url = os.getenv("GEMINI_API_URL")
         api_key = os.getenv("GEMINI_API_KEY")
         
-        logger.info(f"Using API URL: {api_url}")
-        logger.info(f"Using API Key: {api_key[:5]}...")  # Only log first 5 chars for security
-        
         if not api_url or not api_key:
             logger.error("API configuration missing")
-            raise HTTPException(status_code=500, detail="API configuration missing")
+            return ChatResponse(response="Error: API configuration missing")
         
         # Construct the full URL with API key
         full_url = f"{api_url}?key={api_key}"
@@ -105,19 +101,19 @@ async def chat(request: ChatRequest):
         if response.status_code != 200:
             error_msg = f"Gemini API error: {response.text}"
             logger.error(error_msg)
-            raise HTTPException(status_code=response.status_code, detail=error_msg)
+            return ChatResponse(response=f"Error: {error_msg}")
         
         try:
             response_data = response.json()
         except json.JSONDecodeError as e:
             error_msg = f"Failed to parse Gemini API response: {str(e)}"
             logger.error(error_msg)
-            raise HTTPException(status_code=500, detail=error_msg)
+            return ChatResponse(response=f"Error: {error_msg}")
         
         if "candidates" not in response_data or not response_data["candidates"]:
             error_msg = "Invalid response from Gemini API: No candidates found"
             logger.error(error_msg)
-            raise HTTPException(status_code=500, detail=error_msg)
+            return ChatResponse(response=f"Error: {error_msg}")
         
         try:
             # Extract the response text
@@ -125,7 +121,7 @@ async def chat(request: ChatRequest):
         except (KeyError, IndexError) as e:
             error_msg = f"Failed to extract response from Gemini API: {str(e)}"
             logger.error(error_msg)
-            raise HTTPException(status_code=500, detail=error_msg)
+            return ChatResponse(response=f"Error: {error_msg}")
         
         # Send to TwitterBack
         tweet = send_to_twitterback(gemini_response)
@@ -136,11 +132,11 @@ async def chat(request: ChatRequest):
     except requests.exceptions.RequestException as e:
         error_msg = f"Request failed: {str(e)}"
         logger.error(error_msg)
-        raise HTTPException(status_code=500, detail=error_msg)
+        return ChatResponse(response=f"Error: {error_msg}")
     except Exception as e:
         error_msg = f"Unexpected error: {str(e)}"
         logger.error(error_msg)
-        raise HTTPException(status_code=500, detail=error_msg)
+        return ChatResponse(response=f"Error: {error_msg}")
 
 if __name__ == "__main__":
     import uvicorn
