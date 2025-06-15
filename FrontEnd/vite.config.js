@@ -10,7 +10,8 @@ export default defineConfig({
       '/api': {
         target: 'https://backslash-backend.vercel.app',
         changeOrigin: true,
-        secure: false,
+        secure: true,
+        rewrite: (path) => path
       }
     }
   },

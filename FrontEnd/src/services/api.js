@@ -47,17 +47,27 @@ export const sendMessage = async (message) => {
             message: message
         });
         
-        if (!response.data || !response.data.response) {
+        console.log('Raw response from backend:', response);
+        console.log('Response data:', response.data);
+        
+        if (!response.data) {
+            console.error('No response data received');
+            throw new Error('No response data received from server');
+        }
+        
+        if (!response.data.response) {
+            console.error('Invalid response format:', response.data);
             throw new Error('Invalid response format from server');
         }
         
-        console.log('Received response from backend:', response.data);
+        console.log('Received valid response from backend:', response.data);
         return response.data.response;
     } catch (error) {
         console.error('Error in sendMessage:', {
             status: error.response?.status,
             data: error.response?.data,
-            message: error.message
+            message: error.message,
+            error: error
         });
         
         if (error.response?.data?.detail) {
