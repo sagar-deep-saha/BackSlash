@@ -6,9 +6,15 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    allowedHosts: [
+      'back-slash-front-ui.vercel.app',
+      'localhost',
+      '127.0.0.1'
+    ],
     proxy: {
       '/api': {
-        target: 'https://backslash-backend.vercel.app',
+        // target: 'http://localhost:8000',
+        target: 'https://back-slash-back-server.vercel.app',
         changeOrigin: true,
         secure: false,
       }
@@ -17,4 +23,7 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
+  css: {
+    postcss: './postcss.config.cjs'
+  }
 })
