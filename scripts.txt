@@ -1,0 +1,16 @@
+FrontEnd
+npm i
+npm run dev
+
+----------------------
+BackEnd
+python main.py
+
+----------------------
+TwitterClone
+npm i
+npm run dev
+
+----------------------
+TwitterBack
+python main.py
