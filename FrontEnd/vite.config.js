@@ -8,6 +8,7 @@ export default defineConfig({
     host: true,
     allowedHosts: [
       'back-slash-front-ui.vercel.app',
+      'backslash-front-ui.onrender.com',
       'localhost',
       '127.0.0.1'
     ],

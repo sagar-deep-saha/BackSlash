@@ -12,7 +12,7 @@ BackSlash is a full-stack application that combines a chat interface with a Twit
 ## Public URLs
 
 ### Frontend Applications
-- Main Frontend: https://back-slash-front-ui.vercel.app
+- Vercel Frontend: https://back-slash-front-ui.vercel.app
 <!-- - Alternative Frontend: https://backslash-front.vercel.app -->
 <!-- - Twitter Clone: https://backslash-twitter-clone-five.vercel.app -->
 - Render Frontend: https://backslash-twitter-clone.onrender.com
@@ -28,9 +28,9 @@ BackSlash is a full-stack application that combines a chat interface with a Twit
 - `GET /` - Health check endpoint
 - `POST /api/chat` - Chat endpoint for interacting with the AI
 
-### Twitter Backend API (`/api`)
+<!-- ### Twitter Backend API (`/api`)
 - `GET /api/tweets` - Get all tweets
-- `POST /api/tweets` - Create a new tweet
+- `POST /api/tweets` - Create a new tweet -->
 <!-- - `GET /api/fetch-url` - Fetch content from a URL and create a tweet -->
 
 ## Features
