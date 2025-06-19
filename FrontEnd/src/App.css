@@ -35,12 +35,12 @@ body {
   width: 100%;
   overflow-y: auto;
   min-height: 0;
-  border: #000 2px solid;
+  border: #000 1px solid;
   border-radius: 16px;
 }
 
 .message {
-  border: #000 2px solid;
+  border: #000 1px solid;
   /* max-width: 70%; */
   width: auto;
   background-color: #F8F9FA;
@@ -109,7 +109,7 @@ body {
 .chat-input {
   flex: 1;
   padding: 12px 20px;
-  border: 2px solid #E9ECEF;
+  border: 1px solid #E9ECEF;
   border-radius: 24px;
   font-size: 15px;
   outline: none;
@@ -135,12 +135,12 @@ body {
 .send-button {
   padding: 12px 24px;
   background-color: #0078D4;
-  color: black;
+  color: #c7d3e0;
   /* border: none; */
   border-radius: 24px;
   /* border-color: #000; */
   cursor: pointer;
-  border: 2px solid #000;
+  border: 1px solid #000;
   font-size: 15px;
   font-weight: 500;
   /* transition: all 0.2s ease; */
@@ -153,7 +153,7 @@ body {
 
 .send-button:hover:not(:disabled) {
   background-color: #106EBE;
-  border: 2px solid #000;
+  border: 1px solid #000;
   /* border-color: #000; */
   /* transform: translateY(-1px); */
 }
@@ -161,7 +161,7 @@ body {
 .send-button:disabled {
   background-color: #E9ECEF;
   color: #6C757D;
-  border: 2px solid #000;
+  border: 1px solid #000;
   /* border-color: #000; */
   cursor: not-allowed;
 }
@@ -238,7 +238,8 @@ body {
 
 /* Scrollbar styling */
 .chat-messages::-webkit-scrollbar {
-  width: 8px;
+  /* width: 8px; */
+  width: 0px;
 }
 
 .chat-messages::-webkit-scrollbar-track {

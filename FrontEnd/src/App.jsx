@@ -68,8 +68,8 @@ function App() {
 	return (
 		<div class="chat-container">
 			<div class="welcome-message">
-				<h1>Welcome to AI Chat</h1>
-				<p>Ask me anything and I'll help you find the answers</p>
+				<h1>Welcome to AI Post Manager</h1>
+				<p>Ask me to post on certain topic, I will help you with that!</p>
 			</div>
 
 			<div class="chat-messages">

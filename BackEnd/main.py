@@ -31,7 +31,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",  # FrontEnd local
         "https://back-slash-front-ui.vercel.app",   # Production Frontend
-        "https://backslash-front.vercel.app"   # Alternative Production Frontend
+        # "https://backslash-front.vercel.app"   # Alternative Production Frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods
@@ -60,23 +60,34 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
 
-def send_to_twitterback(content):
+def send_to_twitterclone(contentx):
     tweet = {
-        "content": content,
-        "author": "Pr Manager",
-        "username": "@manager",
-        "timestamp": datetime.now().strftime("%I:%M %p"),
-        "likes": 0,
-        "retweets": 0,
-        "replies": 0
+        "username": "sagar",
+        "text": contentx
     }
     try:
-        # resp = requests.post("http://localhost:8001/api/tweets", json=tweet)
-        resp = requests.post("https://backslash-twitter-back-xi.vercel.app/api/tweets", json=tweet)
+        twitter_clone_api_url = os.getenv("TWITTER_CLONE_API_URL")
+        twitter_clone_api_key = os.getenv("TWITTER_CLONE_API_KEY")
+
+        if not twitter_clone_api_url:
+            logger.error("Twitter Clone API URL is missing in environment variables")
+            return None
+        if not twitter_clone_api_key:
+            logger.error("Twitter Clone API KEY is missing in environment variables")
+            return None
+
+        headers = {
+            "Content-Type": "application/json",
+            "api-key": twitter_clone_api_key
+        }
+
+        resp = requests.post(twitter_clone_api_url, json=tweet, headers=headers)
+        logger.info(f"Twitter clone response: {resp.status_code} {resp.text}")
         resp.raise_for_status()
         return resp.json()
+
     except Exception as e:
-        logger.error(f"Failed to send to TwitterBack: {str(e)}")
+        logger.error(f"Failed to send to TwitterClone: {str(e)}")
         return None
 
 @app.get("/")
@@ -116,6 +127,9 @@ async def chat(request: ChatRequest):
                 "maxOutputTokens": 1024,
             }
         }
+        
+        # payload = {"username": 'sagardeep', "text": request.message}
+
         
         # Make API request
         try:
@@ -164,15 +178,18 @@ async def chat(request: ChatRequest):
                 logger.error(error_msg)
                 return {"response": f"Error: {error_msg}"}
             
-            # Send to TwitterBack
-            tweet = send_to_twitterback(gemini_response)
-            if tweet:
-                logger.info("Successfully sent to TwitterBack")
+            
+            # Send to TwitterClone
+            tweetx = send_to_twitterclone(gemini_response)
+            if tweetx:
+                logger.info("Successfully sent to TwitterClone")
             else:
-                logger.warning("Failed to send to TwitterBack")
+                logger.warning("Failed to send to TwitterClone")
+                
             
             # Return the response in the expected format
             return {"response": gemini_response}
+        
                 
         except requests.exceptions.RequestException as e:
             error_msg = f"Request failed: {str(e)}"
@@ -186,5 +203,5 @@ async def chat(request: ChatRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    # uvicorn.run(app, host="0.0.0.0", port=8000)
+    # uvicorn.run(app, host="127.0.0.1", port=8000)
     uvicorn.run(app, host="0.0.0.0", port=8000)
