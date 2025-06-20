@@ -83,14 +83,13 @@ To run the project locally:
    <!-- - Twitter Backend: `uvicorn main:app --host 0.0.0.0 --port 8001` -->
    - Frontend: `npm run dev`
 
-## Environment Variables
+<!-- ## Environment Variables -->
 
-Required environment variables for backend:
+<!-- Required environment variables for backend:
 - `GEMINI_API_URL` - URL for the Gemini API
 - `GEMINI_API_KEY` - API key for Gemini
 - `TWITTER_CLONE_API_URL` - URL for the Twitter clone backend
-- `TWITTER_CLONE_API_KEY` - API key for the Twitter clone backend
-- `MONGO_URI` - MongoDB connection string (e.g. `mongodb+srv://sagarunofficial:<db_password>@katla.3cy7u9s.mongodb.net/?retryWrites=true&w=majority&appName=Katla`)
+- `TWITTER_CLONE_API_KEY` - API key for the Twitter clone backend -->
 
 <!-- ## Contributing
 
@@ -100,6 +99,6 @@ Required environment variables for backend:
 4. Push to the branch
 5. Create a Pull Request -->
 
-## License
+<!-- ## License
 
-This project is licensed under the MIT License. 
+This project is licensed under the MIT License.  -->
