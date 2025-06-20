@@ -42,7 +42,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",  # FrontEnd local
         "https://back-slash-front-ui.vercel.app",   # Production Frontend
-        "https://backslash-twitter-clone.onrender.com"
+        "https://backslash-front-ui.onrender.com"
         # "https://backslash-front.vercel.app"   # Alternative Production Frontend
     ],
     allow_credentials=True,
