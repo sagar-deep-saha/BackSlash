@@ -84,8 +84,13 @@ export const sendMessage = async (message) => {
             throw new Error('Invalid response format from server');
         }
         
+        if (!response.data.id) {
+            // If id is missing, but response is an error, show the error
+            throw new Error(response.data.response);
+        }
+        
         console.log('Received response from backend:', response.data);
-        return response.data.response;
+        return { response: response.data.response, id: response.data.id };
     } catch (error) {
         console.error('Error in sendMessage:', {
             status: error.response?.status,
@@ -104,6 +109,16 @@ export const sendMessage = async (message) => {
     }
 };
 
+export const postToTwitter = async (id, edited_answer) => {
+    try {
+        const response = await api.post('/api/post_tweet', { id, edited_answer });
+        return response.data;
+    } catch (error) {
+        console.error('Error posting to Twitter:', error);
+        throw error;
+    }
+};
+
 export const sendToSecondaryAPI = async (message) => {
     try {
         await api.post('/api/secondary', { message });
@@ -111,4 +126,9 @@ export const sendToSecondaryAPI = async (message) => {
         console.error('Error calling secondary API:', error);
         throw error;
     }
+};
+
+export const fetchHistory = async () => {
+    const response = await api.get('/api/history');
+    return response.data;
 }; 

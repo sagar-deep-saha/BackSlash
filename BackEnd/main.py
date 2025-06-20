@@ -8,6 +8,10 @@ from datetime import datetime
 import json
 import logging
 import sys
+from pymongo import MongoClient
+from bson import ObjectId
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 
 # Configure logging
 logging.basicConfig(
@@ -21,6 +25,13 @@ logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
+
+# MongoDB setup
+MONGO_URI = os.getenv("MONGO_URI") or "mongodb+srv://sagarunofficial:An6ufOgbFMXkzbri@katla.3cy7u9s.mongodb.net/kureghor?retryWrites=true&w=majority&appName=Katla"
+client = MongoClient(MONGO_URI)
+print(client.list_database_names())
+db = client["kureghor"]
+collection = db["queries"]
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -52,13 +63,18 @@ async def log_requests(request: Request, call_next):
         logger.error(f"Request failed: {str(e)}")
         raise
 
-# Request model
+# Request models
 class ChatRequest(BaseModel):
     message: str
+
+class PostTweetRequest(BaseModel):
+    id: str  # MongoDB document id
+    edited_answer: str
 
 # Response model
 class ChatResponse(BaseModel):
     response: str
+    id: str
 
 def send_to_twitterclone(contentx):
     tweet = {
@@ -99,20 +115,13 @@ async def root():
 async def chat(request: ChatRequest):
     try:
         logger.info(f"Received chat request: {request.message}")
-        
-        # Get API URL and key from environment
         api_url = os.getenv("GEMINI_API_URL")
         api_key = os.getenv("GEMINI_API_KEY")
-        
         if not api_url or not api_key:
             logger.error("API configuration missing")
-            return {"response": "Error: API configuration missing"}
-        
-        # Construct the full URL with API key
+            return {"response": "Error: API configuration missing", "id": ""}
         full_url = f"{api_url}?key={api_key}"
         logger.info(f"Making request to Gemini API: {full_url}")
-        
-        # Prepare the request payload
         payload = {
             "contents": [{
                 "role": "user",
@@ -127,11 +136,6 @@ async def chat(request: ChatRequest):
                 "maxOutputTokens": 1024,
             }
         }
-        
-        # payload = {"username": 'sagardeep', "text": request.message}
-
-        
-        # Make API request
         try:
             response = requests.post(
                 full_url,
@@ -140,66 +144,89 @@ async def chat(request: ChatRequest):
                     "Content-Type": "application/json"
                 }
             )
-            
             logger.info(f"Gemini API response status: {response.status_code}")
             logger.info(f"Gemini API response: {response.text}")
-            
             if response.status_code == 400:
                 error_data = response.json()
                 if "error" in error_data and "message" in error_data["error"]:
                     error_msg = error_data["error"]["message"]
                     logger.error(f"Gemini API error: {error_msg}")
-                    return {"response": f"Error: {error_msg}"}
-            
+                    return {"response": f"Error: {error_msg}", "id": ""}
             if response.status_code != 200:
                 error_msg = f"Gemini API error: {response.text}"
                 logger.error(error_msg)
-                return {"response": f"Error: {error_msg}"}
-            
+                return {"response": f"Error: {error_msg}", "id": ""}
             try:
                 response_data = response.json()
                 logger.info("Successfully parsed Gemini API response")
             except json.JSONDecodeError as e:
                 error_msg = f"Failed to parse Gemini API response: {str(e)}"
                 logger.error(error_msg)
-                return {"response": f"Error: {error_msg}"}
-            
+                return {"response": f"Error: {error_msg}", "id": ""}
             if "candidates" not in response_data or not response_data["candidates"]:
                 error_msg = "Invalid response from Gemini API: No candidates found"
                 logger.error(error_msg)
-                return {"response": f"Error: {error_msg}"}
-            
+                return {"response": f"Error: {error_msg}", "id": ""}
             try:
-                # Extract the response text
                 gemini_response = response_data["candidates"][0]["content"]["parts"][0]["text"]
                 logger.info("Successfully extracted response from Gemini API")
             except (KeyError, IndexError) as e:
                 error_msg = f"Failed to extract response from Gemini API: {str(e)}"
                 logger.error(error_msg)
-                return {"response": f"Error: {error_msg}"}
-            
-            
-            # Send to TwitterClone
-            tweetx = send_to_twitterclone(gemini_response)
-            if tweetx:
-                logger.info("Successfully sent to TwitterClone")
-            else:
-                logger.warning("Failed to send to TwitterClone")
-                
-            
-            # Return the response in the expected format
-            return {"response": gemini_response}
-        
-                
+                return {"response": f"Error: {error_msg}", "id": ""}
+            # Save to MongoDB
+            doc = {
+                "query": request.message,
+                "answer": gemini_response,
+                "created_at": datetime.utcnow(),
+                "tweeted": False,
+                "tweet_id": None,
+                "edited_answer": None
+            }
+            result = collection.insert_one(doc)
+            return {"response": gemini_response, "id": str(result.inserted_id)}
         except requests.exceptions.RequestException as e:
             error_msg = f"Request failed: {str(e)}"
             logger.error(error_msg)
-            return {"response": f"Error: {error_msg}"}
-            
+            return {"response": f"Error: {error_msg}", "id": ""}
     except Exception as e:
         error_msg = f"Unexpected error: {str(e)}"
         logger.error(error_msg)
-        return {"response": f"Error: {error_msg}"}
+        return {"response": f"Error: {error_msg}", "id": ""}
+
+@app.post("/api/post_tweet")
+async def post_tweet(req: PostTweetRequest):
+    try:
+        # Find the document
+        doc = collection.find_one({"_id": ObjectId(req.id)})
+        if not doc:
+            raise HTTPException(status_code=404, detail="Query not found")
+        # Post to Twitter clone
+        tweet_result = send_to_twitterclone(req.edited_answer)
+        if tweet_result:
+            # Update DB
+            collection.update_one(
+                {"_id": ObjectId(req.id)},
+                {"$set": {"tweeted": True, "tweet_id": tweet_result.get("_id"), "edited_answer": req.edited_answer}}
+            )
+            return {"status": "success", "tweet_result": tweet_result}
+        else:
+            raise HTTPException(status_code=500, detail="Failed to post to TwitterClone")
+    except Exception as e:
+        logger.error(f"Error in post_tweet: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/history")
+async def get_history():
+    try:
+        docs = list(collection.find().sort("created_at", -1))
+        for doc in docs:
+            doc["id"] = str(doc["_id"])
+            del doc["_id"]
+        return JSONResponse(content=jsonable_encoder(docs))
+    except Exception as e:
+        logger.error(f"Error fetching history: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch history")
 
 if __name__ == "__main__":
     import uvicorn

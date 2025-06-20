@@ -4,8 +4,8 @@ BackSlash is a full-stack application that combines a chat interface with a Twit
 
 ## Project Structure
 
-- `FrontEnd/` - Main frontend application
-- `BackEnd/` - Main backend API service
+- `FrontEnd/` - Main frontend application (Solid.js/React)
+- `BackEnd/` - Main backend API service (FastAPI)
 <!-- - `TwitterClone/` - Twitter-like social media interface -->
 <!-- - `TwitterBack/` - Twitter backend service -->
 
@@ -18,15 +18,26 @@ BackSlash is a full-stack application that combines a chat interface with a Twit
 - Render Frontend: https://backslash-twitter-clone.onrender.com
 
 ### Backend Services
-- Kept secret
+- Kept secret for security
 <!-- - Main Backend: https://backslash-backend.vercel.app -->
 <!-- - Twitter Backend: https://backslash-twitter-back-xi.vercel.app -->
+
+## Workflow
+
+1. **User requests a post on a topic.**
+2. **Backend gets the answer from Gemini and returns it to the frontend.**
+3. **Frontend displays the answer in an editable field.**
+4. **User can edit the answer.**
+5. **User clicks 'Post to Twitter' to submit the edited answer.**
+6. **Backend posts the edited answer to the Twitter clone.**
+7. **Every query and answer (original and edited) are saved in MongoDB.**
 
 ## API Endpoints
 
 ### Main Backend API (`/api`)
 - `GET /` - Health check endpoint
-- `POST /api/chat` - Chat endpoint for interacting with the AI
+- `POST /api/chat` - Get Gemini answer and save to MongoDB
+- `POST /api/post_tweet` - Post edited answer to Twitter clone and update MongoDB
 
 <!-- ### Twitter Backend API (`/api`)
 - `GET /api/tweets` - Get all tweets
@@ -38,22 +49,25 @@ BackSlash is a full-stack application that combines a chat interface with a Twit
 1. **AI Chat Integration**
    - Interactive chat interface
    - Powered by Gemini API
-   - Automatic tweet generation from chat responses
+   - User can edit AI-generated answers before posting
 
 2. **Twitter-like Functionality**
-   - Create and view tweets
-   <!-- - Like, retweet, and reply to tweets -->
-   - Share content from external URLs
+   - Post edited answers to Twitter clone
+   - View history of queries and answers
 
-3. **Cross-Platform Support**
+3. **Persistence**
+   - All queries and answers are saved in MongoDB
+
+4. **Cross-Platform Support**
    - Multiple frontend deployments
    - Scalable backend services
    - CORS enabled for secure cross-origin requests
 
 ## Technology Stack
 
-- **Frontend**: Solid.js
+- **Frontend**: Solid.js/React
 - **Backend**: FastAPI (Python)
+- **Database**: MongoDB Atlas
 - **Deployment**: Vercel, Render
 - **AI Integration**: Google Gemini API
 
@@ -71,9 +85,12 @@ To run the project locally:
 
 ## Environment Variables
 
-Required environment variables:
+Required environment variables for backend:
 - `GEMINI_API_URL` - URL for the Gemini API
 - `GEMINI_API_KEY` - API key for Gemini
+- `TWITTER_CLONE_API_URL` - URL for the Twitter clone backend
+- `TWITTER_CLONE_API_KEY` - API key for the Twitter clone backend
+- `MONGO_URI` - MongoDB connection string (e.g. `mongodb+srv://sagarunofficial:<db_password>@katla.3cy7u9s.mongodb.net/?retryWrites=true&w=majority&appName=Katla`)
 
 <!-- ## Contributing
 
@@ -83,6 +100,6 @@ Required environment variables:
 4. Push to the branch
 5. Create a Pull Request -->
 
-<!-- ## License
+## License
 
-This project is licensed under the MIT License.  -->
+This project is licensed under the MIT License. 
