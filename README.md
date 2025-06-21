@@ -15,7 +15,7 @@ BackSlash is a full-stack application that combines a chat interface with a Twit
 - Vercel Frontend: https://back-slash-front-ui.vercel.app
 <!-- - Alternative Frontend: https://backslash-front.vercel.app -->
 <!-- - Twitter Clone: https://backslash-twitter-clone-five.vercel.app -->
-- Render Frontend: https://backslash-twitter-clone.onrender.com
+- Render Frontend: https://backslash-front-ui.onrender.com
 
 ### Backend Services
 - Kept secret for security
