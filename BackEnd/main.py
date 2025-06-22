@@ -107,6 +107,35 @@ def send_to_twitterclone(contentx):
         logger.error(f"Failed to send to TwitterClone: {str(e)}")
         return None
 
+def get_gemini_response(message):
+    api_url = os.getenv("GEMINI_API_URL")
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_url or not api_key:
+        return None, "Error: API configuration missing"
+    full_url = f"{api_url}?key={api_key}"
+    payload = {
+        "contents": [{
+            "role": "user",
+            "parts": [{"text": message}]
+        }],
+        "generationConfig": {
+            "temperature": 0.7,
+            "topK": 40,
+            "topP": 0.95,
+            "maxOutputTokens": 1024,
+        }
+    }
+    try:
+        response = requests.post(full_url, json=payload, headers={"Content-Type": "application/json"})
+        if response.status_code != 200:
+            return None, f"Gemini API error: {response.text}"
+        data = response.json()
+        if "candidates" not in data or not data["candidates"]:
+            return None, "Invalid response from Gemini API: No candidates found"
+        return data["candidates"][0]["content"]["parts"][0]["text"], None
+    except Exception as e:
+        return None, f"Request failed: {str(e)}"
+
 @app.get("/")
 async def root():
     logger.info("Root endpoint called")
@@ -115,85 +144,27 @@ async def root():
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        logger.info(f"Received chat request: {request.message}")
-        api_url = os.getenv("GEMINI_API_URL")
-        api_key = os.getenv("GEMINI_API_KEY")
-        if not api_url or not api_key:
-            logger.error("API configuration missing")
-            return {"response": "Error: API configuration missing", "id": ""}
-        full_url = f"{api_url}?key={api_key}"
-        logger.info(f"Making request to Gemini API: {full_url}")
-        payload = {
-            "contents": [{
-                "role": "user",
-                "parts": [{
-                    "text": request.message
-                }]
-            }],
-            "generationConfig": {
-                "temperature": 0.7,
-                "topK": 40,
-                "topP": 0.95,
-                "maxOutputTokens": 1024,
-            }
+        instruction = (
+            "I want the response as a Twitter Post within 300 characters, "
+            "human style post writing, minimum of 3 hashtags, and to be precise on the topic."
+        )
+        full_message = f"{request.message}\n\n{instruction}"
+        gemini_response, error = get_gemini_response(full_message)
+        if error:
+            return {"response": error, "id": ""}
+        # Save to MongoDB
+        doc = {
+            "query": request.message,
+            "answer": gemini_response,
+            "created_at": datetime.utcnow(),
+            "tweeted": False,
+            "tweet_id": None,
+            "edited_answer": None
         }
-        try:
-            response = requests.post(
-                full_url,
-                json=payload,
-                headers={
-                    "Content-Type": "application/json"
-                }
-            )
-            logger.info(f"Gemini API response status: {response.status_code}")
-            logger.info(f"Gemini API response: {response.text}")
-            if response.status_code == 400:
-                error_data = response.json()
-                if "error" in error_data and "message" in error_data["error"]:
-                    error_msg = error_data["error"]["message"]
-                    logger.error(f"Gemini API error: {error_msg}")
-                    return {"response": f"Error: {error_msg}", "id": ""}
-            if response.status_code != 200:
-                error_msg = f"Gemini API error: {response.text}"
-                logger.error(error_msg)
-                return {"response": f"Error: {error_msg}", "id": ""}
-            try:
-                response_data = response.json()
-                logger.info("Successfully parsed Gemini API response")
-            except json.JSONDecodeError as e:
-                error_msg = f"Failed to parse Gemini API response: {str(e)}"
-                logger.error(error_msg)
-                return {"response": f"Error: {error_msg}", "id": ""}
-            if "candidates" not in response_data or not response_data["candidates"]:
-                error_msg = "Invalid response from Gemini API: No candidates found"
-                logger.error(error_msg)
-                return {"response": f"Error: {error_msg}", "id": ""}
-            try:
-                gemini_response = response_data["candidates"][0]["content"]["parts"][0]["text"]
-                logger.info("Successfully extracted response from Gemini API")
-            except (KeyError, IndexError) as e:
-                error_msg = f"Failed to extract response from Gemini API: {str(e)}"
-                logger.error(error_msg)
-                return {"response": f"Error: {error_msg}", "id": ""}
-            # Save to MongoDB
-            doc = {
-                "query": request.message,
-                "answer": gemini_response,
-                "created_at": datetime.utcnow(),
-                "tweeted": False,
-                "tweet_id": None,
-                "edited_answer": None
-            }
-            result = collection.insert_one(doc)
-            return {"response": gemini_response, "id": str(result.inserted_id)}
-        except requests.exceptions.RequestException as e:
-            error_msg = f"Request failed: {str(e)}"
-            logger.error(error_msg)
-            return {"response": f"Error: {error_msg}", "id": ""}
+        result = collection.insert_one(doc)
+        return {"response": gemini_response, "id": str(result.inserted_id)}
     except Exception as e:
-        error_msg = f"Unexpected error: {str(e)}"
-        logger.error(error_msg)
-        return {"response": f"Error: {error_msg}", "id": ""}
+        return {"response": f"Unexpected error: {str(e)}", "id": ""}
 
 @app.post("/api/post_tweet")
 async def post_tweet(req: PostTweetRequest):

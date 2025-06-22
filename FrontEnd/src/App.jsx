@@ -6,9 +6,14 @@ function App() {
 	const [messages, setMessages] = createSignal([]); // {query, answer, id, posted, edited}
 	const [input, setInput] = createSignal("");
 	const [isLoading, setIsLoading] = createSignal(false);
+	const [isPosting, setIsPosting] = createSignal(false);
 	const [error, setError] = createSignal(null);
 	const [current, setCurrent] = createSignal(null); // {query, answer, id, posted, edited}
 	const [history, setHistory] = createSignal([]);
+	const [page, setPage] = createSignal("home"); // 'home' or 'history'
+	const [theme, setTheme] = createSignal("light"); // 'light' or 'dark'
+	const ITEMS_PER_PAGE = 5;
+	const [historyPage, setHistoryPage] = createSignal(1);
 	let messagesEndRef;
 
 	onMount(async () => {
@@ -23,6 +28,11 @@ function App() {
 	createEffect(() => {
 		messages();
 		if (messagesEndRef) messagesEndRef.scrollIntoView({ behavior: "smooth" });
+	});
+
+	createEffect(() => {
+		document.body.classList.remove('light-theme', 'dark-theme');
+		document.body.classList.add(theme() === 'dark' ? 'dark-theme' : 'light-theme');
 	});
 
 	const formatTimestamp = (date) => {
@@ -61,7 +71,7 @@ function App() {
 	const handlePost = async () => {
 		if (!current() || current().posted) return;
 		try {
-			setIsLoading(true);
+			setIsPosting(true);
 			const res = await postToTwitter(current().id, current().edited);
 			if (res.status === "success") {
 				setCurrent((cur) => ({ ...cur, posted: true }));
@@ -73,77 +83,176 @@ function App() {
 		} catch (error) {
 			alert(`Failed to post: ${error.message}`);
 		} finally {
-			setIsLoading(false);
+			setIsPosting(false);
 		}
 	};
 
+	const toggleTheme = () => {
+		setTheme(theme() === 'light' ? 'dark' : 'light');
+	};
+
+	const paginatedHistory = () => {
+		const start = (historyPage() - 1) * ITEMS_PER_PAGE;
+		return history().slice(start, start + ITEMS_PER_PAGE);
+	};
+
+	const totalPages = () => Math.ceil(history().length / ITEMS_PER_PAGE);
+
 	return (
-		<div class="chat-container" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-			<div class="welcome-message">
-				<h1>Welcome to AI Post Manager</h1>
-				<p>Ask me to post on a certain topic, edit the answer, and post to Twitter!</p>
-			</div>
-
-			{/* Textarea and Post to Twitter button on top */}
-			{current() && (
-				<div style={{ margin: '24px 0' }}>
-					{/* <label htmlFor="editable-answer" style={{ fontWeight: 'bold' }}>Edit the answer before posting:</label> */}
-					<textarea
-						id="editable-answer"
-						value={current().edited}
-						onInput={handleEdit}
-						rows={8}
-						style={{ width: "70%", minWidth: 300, maxWidth: 700, display: 'block', margin: '16px auto' }}
-						disabled={current().posted}
-					/>
-					<br />
-					<button type="button" onClick={handlePost} disabled={isLoading() || current().posted} class="send-button" style={{ display: 'block', margin: '0 auto' }}>
-						{isLoading() ? "Posting..." : current().posted ? "Posted!" : "Post to Twitter"}
-					</button>
+		<div class={`app-root ${theme() === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+			<aside class="sidebar">
+				<a href="/">
+				<div class="logo-section">
+					<svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none">
+						<title>Web Icon</title>
+						<circle cx="12" cy="12" r="10" stroke="#6366f1" stroke-width="2" fill="#e0e7ff"/>
+						<path d="M2 12h20" stroke="#6366f1" stroke-width="1.5"/>
+						<path d="M12 2a10 10 0 0 1 0 20a10 10 0 0 1 0-20z" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+						<ellipse cx="12" cy="12" rx="5" ry="10" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+						<ellipse cx="12" cy="12" rx="10" ry="5" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+					</svg>
+					<span class="app-title" style={{ fontFamily: 'Arial, sans-serif' }}>BackSlash.AI</span>
 				</div>
-			)}
-
-			{error() && <div class="error-message">{error()}</div>}
-
-			<div style={{ marginTop: 'auto' }}>
-				<form onSubmit={handleSubmit} class="chat-input-form">
-					<input
-						type="text"
-						value={input()}
-						onInput={(e) => setInput(e.currentTarget.value)}
-						placeholder="Type your topic..."
-						class="chat-input"
-						disabled={isLoading()}
-					/>
-					<button type="submit" class="send-button" disabled={isLoading() || !input().trim()}>
-						{isLoading() ? "Loading..." : "Generate Post"}
+				</a>
+				<nav class="nav-links">
+					<button type="button" class={`nav-link${page() === 'home' ? ' active' : ''}`} onClick={() => setPage('home')}>Home</button>
+					<button type="button" class={`nav-link${page() === 'history' ? ' active' : ''}`} onClick={() => setPage('history')}>History</button>
+				</nav>
+				<div class="sidebar-bottom">
+					<button
+						type="button"
+						class="light-dark-toggle-switch"
+						onClick={toggleTheme}
+						aria-label={theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+					>
+						<span class={`toggle-track${theme() === 'dark' ? ' dark' : ''}`}> 
+							<span class="toggle-icon toggle-moon">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<title>Moon Icon</title>
+									<path d="M21 12.79A9 9 0 0 1 12.79 3a7 7 0 1 0 8.21 9.79z" fill="#b4cdff"/>
+								</svg>
+							</span>
+							<span class={`toggle-thumb${theme() === 'dark' ? ' dark' : ''}`} />
+							<span class="toggle-icon toggle-sun">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<title>Sun Icon</title>
+									<circle cx="12" cy="12" r="5" fill="#FFC700"/>
+									{[...Array(8)].map((_,i) => (
+										<rect key={`sunray-${i}`} x="11" y="2" width="2" height="3" rx="1" fill="#FFC700" transform={`rotate(${i*45} 12 12)`}/>
+									))}
+								</svg>
+							</span>
+						</span>
 					</button>
-				</form>
-			</div>
-
-			{/* History at the utmost bottom */}
-			<div class="history-section">
-				<h2 class="history-title">Post Generation History</h2>
-				<ul
-					class="history-list"
-					style={{
-						"max-height": current() ? "180px" : "320px",
-						"transition": "max-height 0.3s"
-					}}
-				>
-					{history().map((item) => (
-						<li key={item.id} class="history-item">
-							<div class="history-query"><b>Q:</b> {item.query}</div>
-							<div class="history-answer"><b>A:</b> {item.edited_answer || item.answer}</div>
-							{item.tweeted
-								? <span class="history-status posted">(Posted)</span>
-								: <span class="history-status not-posted">(Not posted)</span>
-							}
-						</li>
-					))}
-				</ul>
-			</div>
-			<div ref={messagesEndRef} />
+					<div class="user-info" style={{ fontFamily: 'Arial, sans-serif' }}>
+						<span>Sagar Deep Saha</span>
+					</div>
+				</div>
+			</aside>
+			<main class="main-content">
+				{page() === 'home' && (
+					<>
+						<div class="welcome-section">
+							<h1>Welcome to BackSlash.AI</h1>
+							<p>Generate, edit, and manage AI-powered Twitter posts with ease.</p>
+						</div>
+						{!current() && (
+							<div class="feature-cards">
+								<div class="feature-card">AI-Powered Twitter Post Generation</div>
+								<div class="feature-card">Edit & Refine Before Posting</div>
+								<div class="feature-card">Track Post History & Status</div>
+							</div>
+						)}
+						{current() && (
+							<div style={{ margin: '12px 0 0 0' }}>
+								<textarea
+									id="editable-answer"
+									value={current().edited}
+									onInput={handleEdit}
+									rows={8}
+									style={{ width: "100%", minWidth: 800, maxWidth: '100vw', display: 'block', margin: '0 auto' }}
+									disabled={current().posted}
+								/>
+								<br />
+								<button type="button" onClick={handlePost} disabled={isPosting() || current().posted} class="send-button" style={{ display: 'block', margin: '2px auto 4px auto' }}>
+									{isPosting() ? "Posting..." : current().posted ? "Posted!" : "Post to Twitter"}
+								</button>
+							</div>
+						)}
+						{error() && <div class="error-message">{error()}</div>}
+						<div class="chat-input-area">
+							<input
+								type="text"
+								value={input()}
+								onInput={(e) => setInput(e.currentTarget.value)}
+								placeholder="Ask me anything..."
+								class="chat-input"
+								disabled={isLoading()}
+							/>
+							<button
+								type="submit"
+								class="send-button"
+								disabled={isLoading() || !input().trim()}
+								onClick={handleSubmit}
+							>
+								<span class={`arrows-svg${isLoading() ? ' spinning' : ''}`}>
+									<svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<title>Animated Arrows</title>
+										<g>
+											<path d="M4 11h8" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+											<path d="M8 7l4 4-4 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+											<path d="M28 11h-8" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+											<path d="M24 7l-4 4 4 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+										</g>
+									</svg>
+								</span>
+								Generate
+							</button>
+						</div>
+					</>
+				)}
+				{page() === 'history' && (
+					<div class="history-section">
+						<h2 class="history-title">Post Generation History</h2>
+						<ul
+							class="history-list"
+							style={{
+								"max-height": "520px",
+								"transition": "max-height 0.3s"
+							}}
+						>
+							{paginatedHistory().map((item) => (
+								<li key={item.id} class="history-item">
+									<div class="history-query"><b>Q:</b> {item.query}</div>
+									<div class="history-answer"><b>A:</b> {item.edited_answer || item.answer}</div>
+									{item.tweeted
+										? <span class="history-status posted">(Posted)</span>
+										: <span class="history-status not-posted">(Not posted)</span>
+									}
+								</li>
+							))}
+						</ul>
+						<div class="pagination-controls">
+							<button
+								type="button"
+								disabled={historyPage() === 1}
+								onClick={() => setHistoryPage(historyPage() - 1)}
+							>
+								Previous
+							</button>
+							<span>Page {historyPage()} of {totalPages()}</span>
+							<button
+								type="button"
+								disabled={historyPage() === totalPages()}
+								onClick={() => setHistoryPage(historyPage() + 1)}
+							>
+								Next
+							</button>
+						</div>
+					</div>
+				)}
+				<div ref={messagesEndRef} />
+			</main>
 		</div>
 	);
 }
