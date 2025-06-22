@@ -101,19 +101,17 @@ function App() {
 	return (
 		<div class={`app-root ${theme() === 'dark' ? 'dark-theme' : 'light-theme'}`}>
 			<aside class="sidebar">
-				<a href="/">
-				<div class="logo-section">
+				<div class="logo-section" onClick={() => setPage('home')} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setPage('home'); }} style={{ cursor: 'pointer' }}>
 					<svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none">
 						<title>Web Icon</title>
-						<circle cx="12" cy="12" r="10" stroke="#6366f1" stroke-width="2" fill="#e0e7ff"/>
-						<path d="M2 12h20" stroke="#6366f1" stroke-width="1.5"/>
-						<path d="M12 2a10 10 0 0 1 0 20a10 10 0 0 1 0-20z" stroke="#6366f1" stroke-width="1.5" fill="none"/>
-						<ellipse cx="12" cy="12" rx="5" ry="10" stroke="#6366f1" stroke-width="1.5" fill="none"/>
-						<ellipse cx="12" cy="12" rx="10" ry="5" stroke="#6366f1" stroke-width="1.5" fill="none"/>
+						<circle cx="12" cy="12" r="10" stroke="#0A66C2" stroke-width="2" fill="#EAF1FB"/>
+						<path d="M2 12h20" stroke="#0A66C2" stroke-width="1.5"/>
+						<path d="M12 2a10 10 0 0 1 0 20a10 10 0 0 1 0-20z" stroke="#0A66C2" stroke-width="1.5" fill="none"/>
+						<ellipse cx="12" cy="12" rx="5" ry="10" stroke="#0A66C2" stroke-width="1.5" fill="none"/>
+						<ellipse cx="12" cy="12" rx="10" ry="5" stroke="#0A66C2" stroke-width="1.5" fill="none"/>
 					</svg>
 					<span class="app-title" style={{ fontFamily: 'Arial, sans-serif' }}>BackSlash.AI</span>
 				</div>
-				</a>
 				<nav class="nav-links">
 					<button type="button" class={`nav-link${page() === 'home' ? ' active' : ''}`} onClick={() => setPage('home')}>Home</button>
 					<button type="button" class={`nav-link${page() === 'history' ? ' active' : ''}`} onClick={() => setPage('history')}>History</button>
@@ -145,7 +143,8 @@ function App() {
 						</span>
 					</button>
 					<div class="user-info" style={{ fontFamily: 'Arial, sans-serif' }}>
-						<span>Sagar Deep Saha</span>
+						<span class="user-full-name">Sagar Deep Saha</span>
+						<span class="user-short-name"> </span>
 					</div>
 				</div>
 			</aside>
@@ -227,7 +226,33 @@ function App() {
 									<div class="history-answer"><b>A:</b> {item.edited_answer || item.answer}</div>
 									{item.tweeted
 										? <span class="history-status posted">(Posted)</span>
-										: <span class="history-status not-posted">(Not posted)</span>
+										: <>
+											<span class="history-status not-posted">(Not posted)</span>
+											<button
+												type="button"
+												class="history-post-btn"
+												style={{ marginLeft: '12px' }}
+												disabled={isPosting()}
+												onClick={async () => {
+													setIsPosting(true);
+													try {
+														const res = await postToTwitter(item.id, item.edited_answer || item.answer);
+														if (res.status === "success") {
+															setHistory((prev) => prev.map(q => q.id === item.id ? { ...q, tweeted: true } : q));
+															alert('Posted to Twitter!');
+														} else {
+															alert(`Failed to post: ${res.detail || "Unknown error"}`);
+														}
+													} catch (error) {
+														alert(`Failed to post: ${error.message}`);
+													} finally {
+														setIsPosting(false);
+													}
+												}}
+											>
+												{isPosting() ? "Posting..." : "Post to Twitter"}
+											</button>
+										</>
 									}
 								</li>
 							))}

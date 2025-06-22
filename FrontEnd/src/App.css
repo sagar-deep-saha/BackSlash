@@ -1038,3 +1038,421 @@ textarea::-webkit-scrollbar-thumb {
   padding: 0 6px;
 }
 
+/* LinkedIn-inspired color palette */
+:root {
+  --linkedin-blue: #0A66C2;
+  --linkedin-dark-blue: #004182;
+  --linkedin-light-bg: #EAF1FB;
+  --linkedin-sidebar-bg: #F3F6F8;
+  --linkedin-hover: #004182;
+  --linkedin-accent: #D0E8FF;
+}
+
+.light-theme .app-root {
+  background: #fff;
+}
+
+.dark-theme .app-root {
+  background: #1a1d1f;
+}
+
+.sidebar {
+  background: var(--linkedin-sidebar-bg);
+  border-right: 1px solid #e5e7eb;
+}
+
+.logo-section {
+  color: var(--linkedin-blue);
+}
+
+.nav-link {
+  color: #222;
+  background: none;
+}
+
+.nav-link.active, .nav-link:hover {
+  background: var(--linkedin-accent);
+  color: var(--linkedin-blue);
+  box-shadow: 0 2px 8px rgba(10,102,194,0.08);
+}
+
+.send-button {
+  background: linear-gradient(90deg, var(--linkedin-blue) 0%, var(--linkedin-dark-blue) 100%);
+  color: #fff;
+}
+
+.send-button:hover:not(:disabled) {
+  background: linear-gradient(90deg, var(--linkedin-dark-blue) 0%, var(--linkedin-blue) 100%);
+}
+
+.send-button:disabled {
+  background: #E9ECEF;
+  color: #6C757D;
+}
+
+.light-theme .sidebar-bottom {
+  color: #222;
+}
+
+.dark-theme .sidebar-bottom {
+  color: #f3f4f6;
+}
+
+.light-theme .main-content {
+  background: #fff;
+  color: #222;
+}
+
+.dark-theme .main-content {
+  background: #1a1d1f;
+  color: #f3f4f6;
+}
+
+.light-theme .feature-card {
+  background: #eaf1fb;
+  color: #222;
+}
+
+.dark-theme .feature-card {
+  background: #23232a;
+  color: #e0e7ff;
+}
+
+.light-theme .chat-input-area {
+  background: #f3f6f8;
+  color: #222;
+}
+
+.dark-theme .chat-input-area {
+  background: #23232a;
+  color: #f3f4f6;
+}
+
+.light-theme .send-button {
+  background: linear-gradient(90deg, var(--linkedin-blue) 0%, var(--linkedin-dark-blue) 100%);
+  color: #fff;
+}
+
+.dark-theme .send-button {
+  background: linear-gradient(90deg, #222 0%, #444 100%);
+  color: #fff;
+}
+
+.light-theme .send-button:hover:not(:disabled) {
+  background: linear-gradient(90deg, var(--linkedin-dark-blue) 0%, var(--linkedin-blue) 100%);
+}
+
+.dark-theme .send-button:hover:not(:disabled) {
+  background: linear-gradient(90deg, #444 0%, #222 100%);
+}
+
+.light-theme .history-section {
+  background: #eaf1fb;
+  color: #222;
+  box-shadow: 0 2px 12px rgba(10,102,194,0.08);
+}
+
+.dark-theme .history-section {
+  background: #23232a;
+  color: #e0e7ff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+
+.light-theme .history-item {
+  background: #f3f6f8;
+  color: var(--linkedin-dark-blue);
+  border-left: 4px solid var(--linkedin-blue);
+}
+
+.dark-theme .history-item {
+  background: #18181b;
+  color: #e0e7ff;
+  border-left: 4px solid #6366f1;
+}
+
+.light-theme .history-query {
+  color: var(--linkedin-dark-blue);
+}
+
+.dark-theme .history-query {
+  color: #a5b4fc;
+}
+
+/* Update toggle switch for LinkedIn blue */
+.toggle-track {
+  background: #eaf1fb;
+  border: 2.5px solid var(--linkedin-blue);
+}
+.toggle-track.dark {
+  background: #232323;
+  border: 2.5px solid #fff;
+}
+.toggle-thumb {
+  background: var(--linkedin-blue);
+}
+.toggle-track.dark .toggle-thumb {
+  background: #f4f4f4;
+}
+
+/* Update other accent elements as needed */
+
+.dark-theme .history-title {
+  color: #fff;
+}
+.dark-theme .pagination-controls span {
+  color: #fff;
+}
+.dark-theme .app-title {
+  color: #fff;
+}
+
+.history-post-btn {
+  background: linear-gradient(90deg, var(--linkedin-blue) 0%, var(--linkedin-dark-blue) 100%);
+  color: #fff;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 2px 12px;
+  font-size: 0.98em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+  min-width: 48px;
+  min-height: 28px;
+  box-shadow: none;
+  margin-left: 12px;
+}
+
+.history-post-btn:disabled {
+  background: #e5e7eb;
+  color: #a1a1aa;
+  border: 1px solid #e5e7eb;
+  cursor: not-allowed;
+}
+
+.history-post-btn:not(:disabled):hover {
+  background: linear-gradient(90deg, var(--linkedin-dark-blue) 0%, var(--linkedin-blue) 100%);
+  color: #fff;
+  border: 1px solid #111;
+}
+
+.history-post-btn:focus, .history-post-btn:active {
+  outline: none;
+  box-shadow: none;
+  border-color: #222;
+}
+
+button:focus, button:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 900px) {
+  .app-root {
+    flex-direction: column;
+    min-width: unset;
+    max-width: 100vw;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+  .sidebar {
+    flex-direction: row;
+    min-width: 0;
+    max-width: 100vw;
+    width: 100vw;
+    height: 64px;
+    padding: 0 8px;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo-section {
+    padding: 0 8px;
+    gap: 6px;
+  }
+  .nav-links {
+    flex-direction: row;
+    gap: 8px;
+    margin: 0;
+    padding: 0 8px;
+  }
+  .sidebar-bottom {
+    flex-direction: row;
+    gap: 8px;
+    padding: 0 8px;
+    align-items: center;
+    margin-left: auto;
+  }
+  .main-content {
+    padding: 16px 4vw 80px 4vw;
+    min-width: 0;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  .feature-cards {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .feature-card {
+    min-width: unset;
+    padding: 18px 10px;
+    font-size: 1em;
+  }
+  .chat-input-area {
+    left: 0;
+    width: 100vw;
+    max-width: 100vw;
+    border-radius: 0 0 12px 12px;
+    padding: 8px 8px;
+    bottom: 0;
+  }
+  #editable-answer, .vernal-textarea, textarea {
+    min-width: unset;
+    width: 100%;
+    max-width: 100vw;
+    min-height: 180px;
+    height: 180px;
+    font-size: 1em;
+    padding: 10px 8px;
+  }
+  .history-section {
+    min-height: 400px;
+    max-width: 100vw;
+    padding: 8px 2vw;
+  }
+  .history-list {
+    max-height: 220px;
+    padding-right: 0;
+  }
+  .history-item {
+    padding: 10px 8px;
+    font-size: 0.98em;
+  }
+  .history-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  .pagination-controls {
+    gap: 4px;
+    font-size: 0.98em;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-root {
+    min-width: unset;
+    max-width: 100vw;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+  .sidebar {
+    flex-direction: row;
+    min-width: 0;
+    max-width: 100vw;
+    width: 100vw;
+    height: 56px;
+    padding: 0 4px;
+    border-bottom: 1px solid #e5e7eb;
+    border-right: none;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo-section {
+    padding: 0 4px;
+    gap: 4px;
+  }
+  .app-title {
+    font-size: 1em;
+  }
+  .nav-links {
+    flex-direction: row;
+    gap: 4px;
+    margin: 0;
+    padding: 0 4px;
+  }
+  .nav-link {
+    font-size: 0.98em;
+    padding: 8px 4px;
+  }
+  .sidebar-bottom {
+    flex-direction: row;
+    gap: 4px;
+    padding: 0 4px;
+    align-items: center;
+    margin-left: auto;
+  }
+  .main-content {
+    padding: 8px 2vw 64px 2vw;
+    min-width: 0;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  .feature-cards {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .feature-card {
+    min-width: unset;
+    padding: 12px 4px;
+    font-size: 0.95em;
+  }
+  .chat-input-area {
+    left: 0;
+    width: 100vw;
+    max-width: 100vw;
+    border-radius: 0 0 8px 8px;
+    padding: 6px 4px;
+    bottom: 0;
+  }
+  #editable-answer, .vernal-textarea, textarea {
+    min-width: unset;
+    width: 100%;
+    max-width: 100vw;
+    min-height: 120px;
+    height: 120px;
+    font-size: 0.95em;
+    padding: 6px 4px;
+  }
+  .history-section {
+    min-height: 200px;
+    max-width: 100vw;
+    padding: 4px 1vw;
+  }
+  .history-list {
+    max-height: 120px;
+    padding-right: 0;
+  }
+  .history-item {
+    padding: 6px 4px;
+    font-size: 0.95em;
+  }
+  .history-title {
+    font-size: 1em;
+    margin-bottom: 6px;
+  }
+  .pagination-controls {
+    gap: 2px;
+    font-size: 0.95em;
+  }
+}
+
+.user-short-name {
+  display: none;
+}
+@media (max-width: 600px) {
+  .user-full-name {
+    display: none;
+  }
+  .user-short-name {
+    display: inline;
+  }
+}
+
