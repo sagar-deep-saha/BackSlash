@@ -41,6 +41,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",  # FrontEnd local
+        "http://192.168.29.16:5173",  # FrontEnd Ip
         "https://back-slash-front-ui.vercel.app",   # Production Frontend
         "https://backslash-front-ui.onrender.com"
         # "https://backslash-front.vercel.app"   # Alternative Production Frontend

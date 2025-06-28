@@ -6,21 +6,17 @@ BackSlash is a full-stack application that combines a chat interface with a Twit
 
 - `FrontEnd/` - Main frontend application (Solid.js/React)
 - `BackEnd/` - Main backend API service (FastAPI)
-<!-- - `TwitterClone/` - Twitter-like social media interface -->
-<!-- - `TwitterBack/` - Twitter backend service -->
 
 ## Public URLs
 
 ### Frontend Applications
 - Vercel Frontend: https://back-slash-front-ui.vercel.app
 <!-- - Alternative Frontend: https://backslash-front.vercel.app -->
-<!-- - Twitter Clone: https://backslash-twitter-clone-five.vercel.app -->
 - Render Frontend: https://backslash-front-ui.onrender.com
 
 ### Backend Services
 - Kept secret for security
 <!-- - Main Backend: https://backslash-backend.vercel.app -->
-<!-- - Twitter Backend: https://backslash-twitter-back-xi.vercel.app -->
 
 ## Workflow
 
@@ -39,10 +35,6 @@ BackSlash is a full-stack application that combines a chat interface with a Twit
 - `POST /api/chat` - Get Gemini answer and save to MongoDB
 - `POST /api/post_tweet` - Post edited answer to Twitter clone and update MongoDB
 
-<!-- ### Twitter Backend API (`/api`)
-- `GET /api/tweets` - Get all tweets
-- `POST /api/tweets` - Create a new tweet -->
-<!-- - `GET /api/fetch-url` - Fetch content from a URL and create a tweet -->
 
 ## Features
 
@@ -80,25 +72,4 @@ To run the project locally:
 3. Install dependencies for each component
 4. Run the services:
    - Main Backend: `uvicorn main:app --host 0.0.0.0 --port 8000`
-   <!-- - Twitter Backend: `uvicorn main:app --host 0.0.0.0 --port 8001` -->
    - Frontend: `npm run dev`
-
-<!-- ## Environment Variables -->
-
-<!-- Required environment variables for backend:
-- `GEMINI_API_URL` - URL for the Gemini API
-- `GEMINI_API_KEY` - API key for Gemini
-- `TWITTER_CLONE_API_URL` - URL for the Twitter clone backend
-- `TWITTER_CLONE_API_KEY` - API key for the Twitter clone backend -->
-
-<!-- ## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request -->
-
-<!-- ## License
-
-This project is licensed under the MIT License.  -->
