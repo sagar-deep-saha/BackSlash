@@ -27,7 +27,11 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 # MongoDB setup
-MONGO_URI = os.getenv("MONGO_URI") or "mongodb+srv://sagarunofficial:An6ufOgbFMXkzbri@katla.3cy7u9s.mongodb.net/kureghor?retryWrites=true&w=majority&appName=Katla"
+MONGO_URI = os.getenv("MONGO_URI")
+if not MONGO_URI:
+    logger.error("MONGO_URI is missing in environment variables")
+    raise ValueError("MONGO_URI environment variable is required")
+
 client = MongoClient(MONGO_URI)
 print(client.list_database_names())
 db = client["kureghor"]
@@ -37,15 +41,10 @@ collection = db["queries"]
 app = FastAPI()
 
 # Configure CORS
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",  # FrontEnd local
-        "http://192.168.29.16:5173",  # FrontEnd Ip
-        "https://back-slash-front-ui.vercel.app",   # Production Frontend
-        "https://backslash-front-ui.onrender.com"
-        # "https://backslash-front.vercel.app"   # Alternative Production Frontend
-    ],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods
     allow_headers=["*"],  # Allow all headers
@@ -80,7 +79,7 @@ class ChatResponse(BaseModel):
 
 def send_to_twitterclone(contentx):
     tweet = {
-        "username": "sagar",
+        "username": os.getenv("TWITTER_USERNAME", "sagar"),
         "text": contentx
     }
     try:

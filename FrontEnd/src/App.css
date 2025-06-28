@@ -52,7 +52,6 @@ body {
 
 .message {
   border: #000 1px solid;
-  /* max-width: 70%; */
   width: auto;
   background-color: #F8F9FA;
   color: #1A1A1A;
@@ -63,7 +62,6 @@ body {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  /* padding: 12px 16px; */
   padding: 12px 16px;
   border-radius: 16px;
   margin: 2px 0;
@@ -71,38 +69,6 @@ body {
   position: relative;
   animation: messageAppear 0.3s ease-out;
 }
-
-/* @keyframes messageAppear {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-} */
-
-/* .message.user {
-  align-self: flex-end;
-  background-color: #0078D4;
-  color: white;
-  border-bottom-right-radius: 4px;
-}
-
-.message.ai {
-  align-self: flex-start;
-  background-color: #F8F9FA;
-  color: #1A1A1A;
-  border-bottom-left-radius: 4px;
-  border: 1px solid #E9ECEF;
-}
-
-.message-content {
-  word-wrap: break-word;
-  line-height: 1.5;
-  font-size: 15px;
-} */
 
 .chat-input-form {
   display: flex;
@@ -115,7 +81,6 @@ body {
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
-  /* box-shadow: 0 2px 8px rgba(0, 120, 212, 0.06); */
 }
 
 .chat-input {
@@ -177,7 +142,6 @@ body {
   box-shadow: none;
 }
 
-/* Welcome message styling */
 .welcome-message {
   text-align: center;
   padding: 32px 24px;
@@ -199,7 +163,6 @@ body {
   line-height: 1.6;
 }
 
-/* Message timestamp */
 .message-timestamp {
   font-size: 11px;
   color: #6C757D;
@@ -211,7 +174,6 @@ body {
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* Typing indicator */
 .typing-indicator {
   display: flex;
   gap: 4px;
@@ -247,9 +209,7 @@ body {
   }
 }
 
-/* Scrollbar styling */
 .chat-messages::-webkit-scrollbar {
-  /* width: 8px; */
   width: 0px;
 }
 
@@ -276,7 +236,6 @@ body {
     color: #c62828;
 }
 
-/* Input box */
 .chat-input {
   flex: 1;
   padding: 0 22px;
@@ -299,8 +258,7 @@ body {
   color: #003366;
 }
 
-/* Textarea styling */
-#editable-answer, .vernal-textarea, textarea {
+.textarea-styling {
   width: 100%;
   min-width: 800px;
   max-width: 100vw;
@@ -324,27 +282,25 @@ body {
   scrollbar-color: gray #e3e8f0;
 }
 
-#editable-answer::-webkit-scrollbar,
-.vernal-textarea::-webkit-scrollbar,
-textarea::-webkit-scrollbar {
+.textarea-styling::-webkit-scrollbar,
+.textarea-styling::-webkit-scrollbar-track,
+.textarea-styling::-webkit-scrollbar-thumb {
   width: 8px;
   background: #e3e8f0;
 }
 
-#editable-answer::-webkit-scrollbar-thumb,
-.vernal-textarea::-webkit-scrollbar-thumb,
-textarea::-webkit-scrollbar-thumb {
+.textarea-styling::-webkit-scrollbar-thumb {
   background: gray;
   border-radius: 24px;
 }
 
-#editable-answer:focus, .vernal-textarea:focus, textarea:focus {
+.textarea-styling:focus {
   background-color: #cfd8e3;
   box-shadow: 0 0 0 4px rgba(0, 120, 212, 0.10);
   color: #003366;
 }
 
-#editable-answer:disabled, .vernal-textarea:disabled, textarea:disabled {
+.textarea-styling:disabled {
   background-color: #F8F9FA;
   color: #6C757D;
   opacity: 0.7;
@@ -355,13 +311,11 @@ textarea::-webkit-scrollbar-thumb {
   justify-content: center;
   align-items: center;
   position: absolute;
-  /* top: calc(50% + 30%); */
   top: calc(62%);
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-/* History section styles */
 .history-section {
   background: var(--history-bg, #f7fafd);
   border-radius: 8px;
@@ -432,7 +386,6 @@ textarea::-webkit-scrollbar-thumb {
   color: #d32f2f;
 }
 
-/* --- Relatus.AI inspired layout additions --- */
 .app-root {
   display: flex;
   height: 90vh;
@@ -609,11 +562,55 @@ textarea::-webkit-scrollbar-thumb {
   text-align: center;
 }
 
-#editable-answer {
+#editable-answer, .vernal-textarea, textarea {
+  width: 100%;
+  min-width: 800px;
+  max-width: 100vw;
+  min-height: 320px;
+  height: 320px;
+  padding: 16px 22px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  background-color: #e3e8f0;
+  color: #1A237E;
+  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.04);
+  margin-bottom: 6px;
+  resize: none;
+  transition: box-shadow 0.2s;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: gray #e3e8f0;
+}
+
+#editable-answer::-webkit-scrollbar,
+.vernal-textarea::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  width: 8px;
+  background: #e3e8f0;
+}
+
+#editable-answer::-webkit-scrollbar-thumb,
+.vernal-textarea::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 24px;
+}
+
+#editable-answer:focus, .vernal-textarea:focus, textarea:focus {
+  background-color: #cfd8e3;
+  box-shadow: 0 0 0 4px rgba(0, 120, 212, 0.10);
+  color: #003366;
+}
+
+#editable-answer:disabled, .vernal-textarea:disabled, textarea:disabled {
+  background-color: #F8F9FA;
+  color: #6C757D;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .send-button[style] {
@@ -665,7 +662,6 @@ textarea::-webkit-scrollbar-thumb {
   background: #3730a3;
 }
 
-/* Theme support for all main UI elements */
 .light-theme {
   background: #f5f5f5;
   color: #1a1a1a;
@@ -880,7 +876,6 @@ textarea::-webkit-scrollbar-thumb {
   color: #f87171;
 }
 
-/* Smooth transitions for all backgrounds and colors */
 .sidebar, .main-content, .feature-card, .chat-input-area, .send-button, .history-section, .history-item, .nav-link, #editable-answer, textarea {
   transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
@@ -957,7 +952,6 @@ textarea::-webkit-scrollbar-thumb {
   margin-right: 2px;
 }
 
-/* Hide the sun icon in dark mode, hide the moon icon in light mode */
 .toggle-track:not(.dark) .toggle-moon {
   opacity: 0.5;
 }
@@ -1037,7 +1031,6 @@ textarea::-webkit-scrollbar-thumb {
   padding: 0 6px;
 }
 
-/* LinkedIn-inspired color palette */
 :root {
   --linkedin-blue: #0A66C2;
   --linkedin-dark-blue: #004182;
@@ -1177,7 +1170,6 @@ textarea::-webkit-scrollbar-thumb {
   color: #a5b4fc;
 }
 
-/* Update toggle switch for LinkedIn blue */
 .toggle-track {
   background: #eaf1fb;
   border: 2.5px solid var(--linkedin-blue);
@@ -1192,8 +1184,6 @@ textarea::-webkit-scrollbar-thumb {
 .toggle-track.dark .toggle-thumb {
   background: #f4f4f4;
 }
-
-/* Update other accent elements as needed */
 
 .dark-theme .history-title {
   color: #fff;
@@ -1460,7 +1450,6 @@ button:focus, button:active {
   }
 }
 
-/* Extra small phones */
 @media (max-width: 400px) {
   .chat-input-area {
     padding: 4px 2px;

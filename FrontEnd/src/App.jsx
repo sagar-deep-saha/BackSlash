@@ -3,15 +3,15 @@ import { sendMessage, postToTwitter, fetchHistory } from "./services/api";
 import "./App.css";
 
 function App() {
-	const [messages, setMessages] = createSignal([]); // {query, answer, id, posted, edited}
+	const [messages, setMessages] = createSignal([]);
 	const [input, setInput] = createSignal("");
 	const [isLoading, setIsLoading] = createSignal(false);
 	const [isPosting, setIsPosting] = createSignal(false);
 	const [error, setError] = createSignal(null);
-	const [current, setCurrent] = createSignal(null); // {query, answer, id, posted, edited}
+	const [current, setCurrent] = createSignal(null);
 	const [history, setHistory] = createSignal([]);
-	const [page, setPage] = createSignal("home"); // 'home' or 'history'
-	const [theme, setTheme] = createSignal("light"); // 'light' or 'dark'
+	const [page, setPage] = createSignal("home");
+	const [theme, setTheme] = createSignal("light");
 	const ITEMS_PER_PAGE = 5;
 	const [historyPage, setHistoryPage] = createSignal(1);
 	let messagesEndRef;
@@ -21,7 +21,6 @@ function App() {
 			const data = await fetchHistory();
 			setHistory(data);
 		} catch (e) {
-			// handle error if needed
 		}
 	});
 
@@ -136,7 +135,7 @@ function App() {
 									<title>Sun Icon</title>
 									<circle cx="12" cy="12" r="5" fill="#FFC700"/>
 									{[...Array(8)].map((_,i) => (
-										<rect key={`sunray-${i}`} x="11" y="2" width="2" height="3" rx="1" fill="#FFC700" transform={`rotate(${i*45} 12 12)`}/>
+										<rect key={`sunray-${i*45}`} x="11" y="2" width="2" height="3" rx="1" fill="#FFC700" transform={`rotate(${i*45} 12 12)`}/>
 									))}
 								</svg>
 							</span>
