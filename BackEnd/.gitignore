@@ -27,7 +27,8 @@ wheels/
 *.egg
 MANIFEST
 
-# Virtual environments
+# Virtual environments (note: .venv is in root directory)
+../.venv/
 venv/
 env/
 ENV/
