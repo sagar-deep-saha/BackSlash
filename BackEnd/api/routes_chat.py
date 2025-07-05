@@ -14,11 +14,13 @@ router = APIRouter()
 @router.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        # Use LangChain with temperature 1 for more creative responses
-        langchain_response, error = get_langchain_response(request.message)
+        # Fetch last 10 prompts for context
+        last_prompts_cursor = collection.find({}, {"query": 1}).sort("created_at", -1).limit(10)
+        last_prompts = [doc["query"] for doc in reversed(list(last_prompts_cursor))]
+        # Use LangChain with temperature 1 and context
+        langchain_response, error = get_langchain_response(request.message, context_prompts=last_prompts)
         if error:
             return {"response": error, "id": ""}
-        
         # Save to MongoDB
         doc = {
             "query": request.message,

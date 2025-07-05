@@ -5,9 +5,10 @@ from langchain.schema import HumanMessage, SystemMessage
 from core.config import settings
 from core.logger import logger
 
-def get_langchain_response(message):
+def get_langchain_response(message, context_prompts=None):
     """
-    Get response using LangChain with Google Gemini model and temperature 1
+    Get response using LangChain with Google Gemini model and temperature 1.
+    Optionally provide context_prompts (list of previous user prompts).
     """
     try:
         # Initialize the LangChain model with temperature 1
@@ -27,11 +28,15 @@ def get_langchain_response(message):
             "using human-style writing, minimum of 3 hashtags, and be precise on the topic."
         ))
         
-        # Create human message with user input
-        human_message = HumanMessage(content=message)
+        # Build conversation history
+        messages = [system_message]
+        if context_prompts:
+            for prompt in context_prompts:
+                messages.append(HumanMessage(content=prompt))
+        messages.append(HumanMessage(content=message))
         
         # Get response from LangChain
-        response = llm.invoke([system_message, human_message])
+        response = llm.invoke(messages)
         
         return response.content, None
         

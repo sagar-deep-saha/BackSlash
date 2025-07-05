@@ -4,8 +4,8 @@ import axios from 'axios';
 const api = axios.create({
     baseURL: import.meta.DEV 
         ? 'http://localhost:8000' 
-        : 'http://localhost:8000',
-        // : 'https://back-slash-back-server.vercel.app',
+        // : 'http://localhost:8000',
+        : 'https://back-slash-back-server.vercel.app',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -131,4 +131,74 @@ export const sendToSecondaryAPI = async (message) => {
 export const fetchHistory = async () => {
     const response = await api.get('/api/history');
     return response.data;
+};
+
+export const generateImage = async (prompt) => {
+    try {
+        console.log('[IMGGEN] Attempting to generate image for prompt:', prompt);
+        
+        const response = await axios.post(
+            // 'http://localhost:9002/api/generate-image',
+            'https://imggen-amber.vercel.app/api/generate-image',
+            { prompt },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': 'sagar_1234567890123456'
+                },
+                responseType: 'blob',
+                timeout: 120000
+            }
+        );
+        
+        console.log('[IMGGEN] Image generated successfully:', response.status);
+        
+        if (response.status === 200 && response.data) {
+            return response.data;
+        }
+        throw new Error('Image generation failed');
+    } catch (error) {
+        console.error('[IMGGEN] Error details:', {
+            message: error.message,
+            code: error.code,
+            status: error.response?.status,
+            statusText: error.response?.statusText
+        });
+        
+        // Handle specific error cases
+        if (error.code === 'ECONNABORTED') {
+            throw new Error('Image generation timed out. Please try again.');
+        }
+        
+        if (error.code === 'ERR_NETWORK') {
+            throw new Error('Cannot connect to image generation service. Please check your internet connection and try again.');
+        }
+        
+        if (error.response?.status === 401) {
+            throw new Error('Invalid API key for image generation service.');
+        }
+        
+        if (error.response?.status === 400) {
+            throw new Error('Invalid prompt. Please provide a valid text prompt.');
+        }
+        
+        if (error.response?.status === 500) {
+            throw new Error('Image generation service error. Please try again later.');
+        }
+        
+        if (error.response?.data) {
+            try {
+                const text = await error.response.data.text();
+                throw new Error(text || 'Image generation failed');
+            } catch {
+                throw new Error('Image generation failed');
+            }
+        }
+        
+        if (error.message) {
+            throw new Error(error.message);
+        }
+        
+        throw new Error('Image generation failed');
+    }
 }; 

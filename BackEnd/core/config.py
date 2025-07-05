@@ -12,5 +12,6 @@ class Settings:
     TWITTER_CLONE_API_KEY = os.getenv("TWITTER_CLONE_API_KEY")
     CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
     TWITTER_USERNAME = os.getenv("TWITTER_USERNAME", "sagar")
+    HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
 
 settings = Settings() 
