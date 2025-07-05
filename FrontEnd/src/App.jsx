@@ -131,6 +131,21 @@ function App() {
 		}
 	};
 
+	const handleRegenerateImage = async () => {
+		if (!current()?.query?.trim() || isImageLoading()) return;
+		setIsImageLoading(true);
+		setImageUrl(null);
+		try {
+			const blob = await generateImage(current().query);
+			const url = URL.createObjectURL(blob);
+			setImageUrl(url);
+		} catch (err) {
+			alert(`Image generation failed: ${err.message}`);
+		} finally {
+			setIsImageLoading(false);
+		}
+	};
+
 	const toggleTheme = () => {
 		setTheme(theme() === "light" ? "dark" : "light");
 	};
@@ -349,67 +364,57 @@ function App() {
 														src={imageUrl()}
 														alt="Generated"
 													/>
+													<button
+														type="button"
+														class="image-regenerate-btn"
+														onClick={handleRegenerateImage}
+														disabled={isImageLoading()}
+														title="Regenerate Image"
+													>
+														<svg
+															width="20"
+															height="20"
+															viewBox="0 0 24 24"
+															fill="none"
+															xmlns="http://www.w3.org/2000/svg"
+														>
+															<title>Refresh Icon</title>
+															<path
+																d="M1 4v6h6"
+																stroke="currentColor"
+																strokeWidth="2"
+																strokeLinecap="round"
+																strokeLinejoin="round"
+															/>
+															<path
+																d="M23 20v-6h-6"
+																stroke="currentColor"
+																strokeWidth="2"
+																strokeLinecap="round"
+																strokeLinejoin="round"
+															/>
+															<path
+																d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"
+																stroke="currentColor"
+																strokeWidth="2"
+																strokeLinecap="round"
+																strokeLinejoin="round"
+															/>
+														</svg>
+													</button>
 												</div>
 											)}
 											{isImageLoading() && (
 												<div class="generated-image-container">
-													<div style={{
-														display: 'flex',
-														flexDirection: 'column',
-														alignItems: 'center',
-														justifyContent: 'center',
-														height: '100%',
-														color: theme() === 'dark' ? '#ffffff' : '#6b7280',
-														fontSize: '14px',
-														fontWeight: '500'
-													}}>
-														<div style={{
-															display: 'flex',
-															gap: '8px',
-															marginBottom: '12px'
-														}}>
-															<div
-																style={{
-																	width: '12px',
-																	height: '12px',
-																	borderRadius: '50%',
-																	background: theme() === 'dark' ? '#ffffff' : '#6b7280',
-																	animation: 'pulse 1.4s ease-in-out infinite',
-																	animationDelay: '0s'
-																}}
-															/>
-															<div
-																style={{
-																	width: '12px',
-																	height: '12px',
-																	borderRadius: '50%',
-																	background: theme() === 'dark' ? '#ffffff' : '#6b7280',
-																	animation: 'pulse 1.4s ease-in-out infinite',
-																	animationDelay: '0.2s'
-																}}
-															/>
-															<div
-																style={{
-																	width: '12px',
-																	height: '12px',
-																	borderRadius: '50%',
-																	background: theme() === 'dark' ? '#ffffff' : '#6b7280',
-																	animation: 'pulse 1.4s ease-in-out infinite',
-																	animationDelay: '0.4s'
-																}}
-															/>
-															<div
-																style={{
-																	width: '12px',
-																	height: '12px',
-																	borderRadius: '50%',
-																	background: theme() === 'dark' ? '#ffffff' : '#6b7280',
-																	animation: 'pulse 1.4s ease-in-out infinite',
-																	animationDelay: '0.6s'
-																}}
-															/>
+													<div class={`image-loader-container ${theme() === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+														<div class="image-loader-spinner">
+															<span class="image-loader-blur-layer blur-5" />
+															<span class="image-loader-blur-layer blur-10" />
+															<span class="image-loader-blur-layer blur-25" />
+															<span class="image-loader-blur-layer blur-50" />
+															<div class={`image-loader-center ${theme() === 'dark' ? 'dark-theme' : 'light-theme'}`} />
 														</div>
-														<span>Generating Image...</span>
+														<span class="image-loader-text">Generating Image...</span>
 													</div>
 												</div>
 											)}

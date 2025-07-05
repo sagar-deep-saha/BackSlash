@@ -1511,6 +1511,7 @@ button:focus, button:active {
   border-radius: 12px;
   transition: all 0.3s;
   overflow: hidden;
+  position: relative;
 }
 
 .generated-image-container img {
@@ -1535,5 +1536,176 @@ button:focus, button:active {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@keyframes rotate_3922 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Image Loader Styles */
+.image-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.image-loader-container.light-theme {
+  color: #6b7280;
+}
+
+.image-loader-container.dark-theme {
+  color: #ffffff;
+}
+
+.image-loader-spinner {
+  position: relative;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  animation: rotate_3922 1.2s linear infinite;
+  background: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
+  margin: 0 auto 30px auto;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(155, 89, 182, 0.3);
+}
+
+.image-loader-blur-layer {
+  position: absolute;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
+  top: 0;
+  left: 0;
+}
+
+.image-loader-blur-layer.blur-5 {
+  filter: blur(5px);
+}
+
+.image-loader-blur-layer.blur-10 {
+  filter: blur(10px);
+}
+
+.image-loader-blur-layer.blur-25 {
+  filter: blur(25px);
+}
+
+.image-loader-blur-layer.blur-50 {
+  filter: blur(50px);
+}
+
+.image-loader-center {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: solid 4px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.image-loader-center.light-theme {
+  background: #ffffff;
+  border-color: #ffffff;
+}
+
+.image-loader-center.dark-theme {
+  background: #1f2937;
+  border-color: #1f2937;
+}
+
+.image-loader-text {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Image Regeneration Button */
+.image-regenerate-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.image-regenerate-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.image-regenerate-btn:active {
+  transform: scale(0.95);
+}
+
+.image-regenerate-btn svg {
+  width: 32px;
+  height: 32px;
+  transition: transform 0.3s ease;
+  color: #0078D4;
+}
+
+.image-regenerate-btn:hover svg {
+  transform: rotate(180deg);
+  color: #005bb5;
+}
+
+.image-regenerate-btn:hover svg path {
+  stroke: #005bb5;
+}
+
+.image-regenerate-btn svg path {
+  stroke: #0078D4;
+  stroke-width: 2.5;
+  transition: stroke 0.2s ease;
+}
+
+.image-regenerate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.image-regenerate-btn:disabled:hover {
+  transform: none;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Dark theme support for the button */
+.dark-theme .image-regenerate-btn {
+  background: rgba(31, 41, 55, 0.9);
+  color: #ffffff;
+}
+
+.dark-theme .image-regenerate-btn:hover {
+  background: rgba(31, 41, 55, 1);
+}
+
+.dark-theme .image-regenerate-btn:disabled {
+  background: rgba(31, 41, 55, 0.6);
 }
 
