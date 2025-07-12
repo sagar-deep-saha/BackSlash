@@ -14,8 +14,8 @@ export default defineConfig({
     ],
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
-        // target: 'https://back-slash-back-server.vercel.app',
+        // target: 'http://localhost:8000',
+        target: 'https://back-slash-back-server.vercel.app',
         changeOrigin: true,
         secure: false,
       }

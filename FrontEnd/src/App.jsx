@@ -423,11 +423,36 @@ function App() {
 									</div>
 								)}
 								{error() && <div class="error-message">{error()}</div>}
+								{/* Image Style Select for mobile (above chat input area) */}
+					{imageToggle() && window.innerWidth <= 600 && (
+						<div class="mobile-style-select-bar">
+							<select
+								id="image-style-select"
+								class="sidebar-style-select image-style-select-align"
+								value={imageStyle()}
+								onInput={e => setImageStyle(e.currentTarget.value)}
+							>
+								<option value="" disabled>Select Image Style</option>
+								<option value="photorealistic">Photorealistic</option>
+								<option value="cinematic">Cinematic</option>
+								<option value="digital-art">Digital Art</option>
+								<option value="watercolor">Watercolor</option>
+								<option value="oil-painting">Oil Painting</option>
+								<option value="anime">Anime</option>
+								<option value="fantasy">Fantasy</option>
+								<option value="minimalist">Minimalist</option>
+								<option value="vintage">Vintage</option>
+								<option value="ghibli">Ghibli</option>
+								<option value="cyberpunk">Cyberpunk</option>
+							</select>
+						</div>
+					)}
 								<div class="chat-input-area">
 									<button
 										type="button"
 										onClick={() => setImageToggle(!imageToggle())}
-										style={{
+										class={window.innerWidth <= 600 ? 'mobile-image-toggle-btn' : ''}
+										style={window.innerWidth > 600 ? {
 											width: '30px',
 											height: '50px',
 											borderRadius: '8px',
@@ -442,11 +467,11 @@ function App() {
 											position: 'relative',
 											transition: 'background 0.3s',
 											zIndex: 2,
-										}}
+										} : {}}
 									>
 										<span
-											class="toggle-thumb-custom"
-											style={{
+											class={window.innerWidth <= 600 ? 'mobile-toggle-thumb-custom' : 'toggle-thumb-custom'}
+											style={window.innerWidth > 600 ? {
 												width: '28px',
 												height: '24px',
 												borderRadius: '12px !important',
@@ -461,7 +486,7 @@ function App() {
 												alignItems: 'center',
 												justifyContent: 'center',
 												zIndex: 1,
-											}}
+											} : {}}
 										>
 											{/* Thumb */}
 										</span>
@@ -536,7 +561,8 @@ function App() {
 											</svg>
 										</span>
 									</button>
-									{imageToggle() && (
+									{/* Image Style Select for desktop/tablet (inside chat-input-area, after toggle) */}
+									{imageToggle() && window.innerWidth > 600 && (
 										<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
 											<select
 												id="image-style-select"
@@ -578,19 +604,9 @@ function App() {
 										class="send-button"
 										disabled={isLoading() || !input().trim()}
 										onClick={handleSubmit}
+										style={{ minWidth: '56px' }}
 									>
-										<span class={`arrows-svg${isLoading() ? ' spinning' : ''}`}>
-											<svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<title>Animated Arrows</title>
-												<g>
-													<path d="M4 11h8" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M8 7l4 4-4 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M28 11h-8" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-													<path d="M24 7l-4 4 4 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-												</g>
-											</svg>
-										</span>
-										Generate
+										{window.innerWidth <= 600 ? 'Gen' : 'Generate'}
 									</button>
 								</div>
 							</div>
