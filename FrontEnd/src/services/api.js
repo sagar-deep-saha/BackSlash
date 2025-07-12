@@ -4,8 +4,8 @@ import axios from 'axios';
 const api = axios.create({
     baseURL: import.meta.DEV 
         ? 'http://localhost:8000' 
-        // : 'http://localhost:8000',
-        : 'https://back-slash-back-server.vercel.app',
+        : 'http://localhost:8000',
+        // : 'https://back-slash-back-server.vercel.app',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -133,14 +133,14 @@ export const fetchHistory = async () => {
     return response.data;
 };
 
-export const generateImage = async (prompt) => {
+export const generateImage = async (prompt, style) => {
     try {
-        console.log('[IMGGEN] Attempting to generate image for prompt:', prompt);
+        console.log('[IMGGEN] Attempting to generate image for prompt:', prompt, 'with style:', style);
         
         const response = await axios.post(
             // 'http://localhost:9002/api/generate-image',
             'https://imggen-amber.vercel.app/api/generate-image',
-            { prompt },
+            { prompt, style },
             {
                 headers: {
                     'Content-Type': 'application/json',

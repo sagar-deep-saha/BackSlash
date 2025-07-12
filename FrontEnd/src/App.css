@@ -1235,6 +1235,71 @@ button:focus, button:active {
   box-shadow: none !important;
 }
 
+/* Sidebar Image Style Select */
+.sidebar-style-select-label {
+  font-weight: 600;
+  font-size: 1em;
+  margin-bottom: 4px;
+  color: var(--linkedin-blue);
+  letter-spacing: 0.01em;
+}
+
+.sidebar-style-select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #c7d2fe;
+  background: #f3f6f8;
+  color: #222;
+  font-size: 1.08em;
+  font-weight: 500;
+  transition: border 0.2s, box-shadow 0.2s;
+  margin-bottom: 8px;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(10,102,194,0.06);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' fill='none' stroke='%230078D4' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px 18px;
+}
+
+.sidebar-style-select option {
+  background: #f3f6f8;
+  color: #222;
+  font-size: 1.08em;
+  font-weight: 500;
+  padding: 8px 12px;
+}
+
+.sidebar-style-select:focus, .sidebar-style-select:hover {
+  border-color: var(--linkedin-blue);
+  box-shadow: 0 0 0 2px #c7d2fe;
+}
+
+.dark-theme .sidebar-style-select {
+  background: #23232a;
+  color: #e0e7ff;
+  border: 1.5px solid #6366f1;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' fill='none' stroke='%23a5b4fc' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+}
+
+.dark-theme .sidebar-style-select option {
+  background: #23232a;
+  color: #e0e7ff;
+  font-size: 1.08em;
+  font-weight: 500;
+  padding: 8px 12px;
+}
+
+.dark-theme .sidebar-style-select:focus, .dark-theme .sidebar-style-select:hover {
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 2px #3730a3;
+}
+
 @media (max-width: 900px) {
   .app-root {
     flex-direction: column;
@@ -1416,10 +1481,10 @@ button:focus, button:active {
     min-width: unset;
     width: 100%;
     max-width: 100vw;
-    min-height: 220px;
-    height: 220px;
-    font-size: 0.95em;
-    padding: 10px 8px;
+    min-height: 180px;
+    height: 180px;
+    font-size: 0.9em;
+    padding: 8px 6px;
   }
   .history-section {
     min-height: 200px;
@@ -1473,10 +1538,10 @@ button:focus, button:active {
     padding: 6px 1vw 60px 1vw;
   }
   #editable-answer, .vernal-textarea, textarea {
-    min-height: 180px;
-    height: 180px;
-    font-size: 0.9em;
-    padding: 8px 6px;
+    min-height: 160px;
+    height: 160px;
+    font-size: 0.85em;
+    padding: 6px 4px;
   }
   .history-section {
     padding: 2px 0.5vw;
@@ -1707,5 +1772,602 @@ button:focus, button:active {
 
 .dark-theme .image-regenerate-btn:disabled {
   background: rgba(31, 41, 55, 0.6);
+}
+
+/* Enhanced Responsive Design for Tablet and Smartphone */
+
+/* Tablet Styles (768px - 1024px) */
+@media (max-width: 1024px) {
+  .app-root {
+    min-width: unset;
+    max-width: 100vw;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .main-content {
+    padding: 24px 3vw 80px 3vw;
+  }
+  
+  .feature-cards {
+    flex-direction: row;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .feature-card {
+    min-width: 200px;
+    max-width: 250px;
+    padding: 20px 16px;
+  }
+  
+  /* Responsive textarea and image layout for tablet */
+  .current-content-container {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  
+  #editable-answer, .vernal-textarea, textarea {
+    min-width: unset !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 280px !important;
+    height: 280px !important;
+    flex: none !important;
+  }
+  
+  .generated-image-container {
+    width: 100% !important;
+    height: 300px !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+    flex: none !important;
+  }
+  
+  .image-regenerate-btn {
+    width: 44px;
+    height: 44px;
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .image-regenerate-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Large Tablet Styles (768px - 900px) */
+@media (max-width: 900px) {
+  .app-root {
+    flex-direction: column;
+    min-width: unset;
+    max-width: 100vw;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .sidebar {
+    flex-direction: row;
+    min-width: 0;
+    max-width: 100vw;
+    width: 100vw;
+    height: 64px;
+    padding: 0 8px;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .logo-section {
+    padding: 0 8px;
+    gap: 6px;
+  }
+  
+  .nav-links {
+    flex-direction: row;
+    gap: 8px;
+    margin: 0;
+    padding: 0 8px;
+  }
+  
+  .sidebar-bottom {
+    flex-direction: row;
+    gap: 8px;
+    padding: 0 8px;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+  .main-content {
+    padding: 16px 4vw 80px 4vw;
+    min-width: 0;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  
+  .feature-cards {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  
+  .feature-card {
+    min-width: unset;
+    padding: 18px 10px;
+    font-size: 1em;
+  }
+  
+  .chat-input-area {
+    left: 0;
+    width: 100vw;
+    max-width: 100vw;
+    border-radius: 0 0 12px 12px;
+    padding: 8px 8px;
+    bottom: 0;
+  }
+  
+  /* Responsive textarea and image layout for large tablet */
+  .current-content-container {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  
+  #editable-answer, .vernal-textarea, textarea {
+    min-width: unset !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-height: 180px !important;
+    height: 180px !important;
+    font-size: 0.95em;
+    padding: 10px 8px;
+    flex: none !important;
+  }
+  
+  .generated-image-container {
+    width: 100% !important;
+    height: 250px !important;
+    max-width: 350px !important;
+    margin: 0 auto !important;
+    flex: none !important;
+  }
+  
+  .image-regenerate-btn {
+    width: 40px;
+    height: 40px;
+    bottom: 8px;
+    right: 8px;
+  }
+  
+  .image-regenerate-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .history-section {
+    min-height: 400px;
+    max-width: 100vw;
+    padding: 8px 2vw;
+  }
+  
+  .history-list {
+    max-height: 220px;
+    padding-right: 0;
+  }
+  
+  .history-item {
+    padding: 10px 8px;
+    font-size: 0.98em;
+  }
+  
+  .history-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  
+  .pagination-controls {
+    gap: 4px;
+    font-size: 0.98em;
+  }
+}
+
+/* Mobile Styles (600px - 768px) */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 12px 3vw 70px 3vw;
+  }
+  
+  .welcome-section h1 {
+    font-size: 1.8rem;
+  }
+  
+  .welcome-section p {
+    font-size: 0.95rem;
+  }
+  
+  .feature-cards {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .feature-card {
+    padding: 16px 8px;
+    font-size: 0.95em;
+  }
+  
+  /* Responsive textarea and image layout for mobile */
+  .current-content-container {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  
+  #editable-answer, .vernal-textarea, textarea {
+    min-width: unset !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 160px !important;
+    height: 160px !important;
+    font-size: 0.9em;
+    padding: 8px 6px;
+    flex: none !important;
+  }
+  
+  .generated-image-container {
+    width: 100% !important;
+    height: 200px !important;
+    max-width: 300px !important;
+    margin: 0 auto !important;
+    flex: none !important;
+  }
+  
+  .image-regenerate-btn {
+    width: 36px;
+    height: 36px;
+    bottom: 6px;
+    right: 6px;
+  }
+  
+  .image-regenerate-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .image-loader-spinner {
+    height: 80px;
+    width: 80px;
+  }
+  
+  .image-loader-text {
+    font-size: 12px;
+  }
+}
+
+/* Small Mobile Styles (400px - 600px) */
+@media (max-width: 600px) {
+  .app-root {
+    min-width: unset;
+    max-width: 100vw;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .sidebar {
+    flex-direction: row;
+    min-width: 0;
+    max-width: 100vw;
+    width: 100vw;
+    height: 56px;
+    padding: 0 4px;
+    border-bottom: 1px solid #e5e7eb;
+    border-right: none;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .logo-section {
+    padding: 0 4px;
+    gap: 4px;
+  }
+  
+  .app-title {
+    font-size: 1em;
+  }
+  
+  .nav-links {
+    flex-direction: row;
+    gap: 4px;
+    margin: 0;
+    padding: 0 4px;
+  }
+  
+  .nav-link {
+    font-size: 0.98em;
+    padding: 8px 4px;
+  }
+  
+  .sidebar-bottom {
+    flex-direction: row;
+    gap: 4px;
+    padding: 0 4px;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+  .main-content {
+    padding: 8px 2vw 64px 2vw;
+    min-width: 0;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  
+  .welcome-section h1 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+  
+  .welcome-section p {
+    font-size: 0.9rem;
+  }
+  
+  .feature-cards {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .feature-card {
+    min-width: unset;
+    padding: 12px 4px;
+    font-size: 0.95em;
+  }
+  
+  .chat-input-area {
+    left: 0;
+    width: 100vw;
+    max-width: 100vw;
+    border-radius: 0 0 8px 8px;
+    padding: 6px 4px;
+    bottom: 0;
+    gap: 6px;
+  }
+  
+  .chat-input-area input {
+    font-size: 0.9em;
+    padding: 0 8px;
+  }
+  
+  .chat-input-area button {
+    padding: 6px 12px;
+    font-size: 0.9em;
+    min-width: 80px;
+    white-space: nowrap;
+  }
+  
+  /* Responsive textarea and image layout for small mobile */
+  .current-content-container {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  #editable-answer, .vernal-textarea, textarea {
+    min-width: unset !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-height: 140px !important;
+    height: 140px !important;
+    font-size: 0.9em;
+    padding: 8px 6px;
+    flex: none !important;
+  }
+  
+  .generated-image-container {
+    width: 100% !important;
+    height: 160px !important;
+    max-width: 250px !important;
+    margin: 0 auto !important;
+    flex: none !important;
+  }
+  
+  .image-regenerate-btn {
+    width: 32px;
+    height: 32px;
+    bottom: 4px;
+    right: 4px;
+  }
+  
+  .image-regenerate-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .image-loader-spinner {
+    height: 60px;
+    width: 60px;
+  }
+  
+  .image-loader-text {
+    font-size: 11px;
+  }
+  
+  .history-section {
+    min-height: 200px;
+    max-width: 100vw;
+    padding: 4px 1vw;
+  }
+  
+  .history-list {
+    max-height: 120px;
+    padding-right: 0;
+  }
+  
+  .history-item {
+    padding: 6px 4px;
+    font-size: 0.95em;
+  }
+  
+  .history-title {
+    font-size: 1em;
+    margin-bottom: 6px;
+  }
+  
+  .pagination-controls {
+    gap: 2px;
+    font-size: 0.95em;
+  }
+  
+  .send-button {
+    padding: 0 8px;
+    font-size: 0.9em;
+    min-width: 80px;
+    white-space: nowrap;
+  }
+}
+
+/* Extra Small Mobile Styles (320px - 400px) */
+@media (max-width: 400px) {
+  .main-content {
+    padding: 6px 1vw 60px 1vw;
+  }
+  
+  .welcome-section h1 {
+    font-size: 1.3rem;
+  }
+  
+  .welcome-section p {
+    font-size: 0.85rem;
+  }
+  
+  .feature-card {
+    padding: 10px 2px;
+    font-size: 0.9em;
+  }
+  
+  .chat-input-area {
+    padding: 4px 2px;
+    gap: 4px;
+  }
+  
+  .chat-input-area input {
+    font-size: 0.85em;
+    padding: 0 4px;
+  }
+  
+  .chat-input-area button {
+    padding: 4px 8px;
+    font-size: 0.85em;
+    min-width: 70px;
+  }
+  
+  /* Responsive textarea and image layout for extra small mobile */
+  .current-content-container {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  
+  #editable-answer, .vernal-textarea, textarea {
+    min-width: unset !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 120px !important;
+    height: 120px !important;
+    font-size: 0.85em;
+    padding: 6px 4px;
+    flex: none !important;
+  }
+  
+  .generated-image-container {
+    width: 100% !important;
+    height: 140px !important;
+    max-width: 200px !important;
+    margin: 0 auto !important;
+    flex: none !important;
+  }
+  
+  .image-regenerate-btn {
+    width: 28px;
+    height: 28px;
+    bottom: 3px;
+    right: 3px;
+  }
+  
+  .image-regenerate-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .image-loader-spinner {
+    height: 50px;
+    width: 50px;
+  }
+  
+  .image-loader-text {
+    font-size: 10px;
+  }
+  
+  .send-button {
+    padding: 0 6px;
+    font-size: 0.85em;
+    min-width: 70px;
+  }
+  
+  .history-section {
+    padding: 2px 0.5vw;
+  }
+  
+  .history-item {
+    padding: 4px 2px;
+    font-size: 0.9em;
+  }
+}
+
+/* User name responsive behavior */
+.user-short-name {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .user-full-name {
+    display: none;
+  }
+  
+  .user-short-name {
+    display: inline;
+  }
+}
+
+.image-style-select-align {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  background-color: #e3e8f0;
+  color: #1A237E;
+  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.10);
+  box-sizing: border-box;
+  min-width: 120px;
+  width: auto;
+  vertical-align: middle;
+  font-size: 14px;
+  letter-spacing: -0.5px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.image-style-select-align option {
+  font-size: 13px;
+  letter-spacing: -0.5px;
 }
 

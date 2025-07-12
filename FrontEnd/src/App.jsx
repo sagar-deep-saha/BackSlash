@@ -22,6 +22,7 @@ function App() {
 	const [imageUrl, setImageUrl] = createSignal(null);
 	const [isImageLoading, setIsImageLoading] = createSignal(false);
 	const [imageToggle, setImageToggle] = createSignal(false);
+	const [imageStyle, setImageStyle] = createSignal("");
 	let textareaRef;
 	const [textareaHeight, setTextareaHeight] = createSignal(300);
 	let messagesEndRef;
@@ -121,7 +122,7 @@ function App() {
 		setIsImageLoading(true);
 		setImageUrl(null);
 		try {
-			const blob = await generateImage(input());
+			const blob = await generateImage(input(), imageStyle());
 			const url = URL.createObjectURL(blob);
 			setImageUrl(url);
 		} catch (err) {
@@ -136,7 +137,7 @@ function App() {
 		setIsImageLoading(true);
 		setImageUrl(null);
 		try {
-			const blob = await generateImage(current().query);
+			const blob = await generateImage(current().query, imageStyle());
 			const url = URL.createObjectURL(blob);
 			setImageUrl(url);
 		} catch (err) {
@@ -313,22 +314,8 @@ function App() {
 								<div class="feature-card">Track Post History & Status</div>
 							</div>
 						)}
-						<div
-							style={{
-								display: "flex",
-								gap: "1rem",
-								alignItems: "flex-start",
-								flexDirection: "row",
-							}}
-						>
-							<div
-								style={{
-									flex: (isImageLoading() || imageUrl() || imageToggle()) ? "0 0 50%" : 1,
-									maxWidth: (isImageLoading() || imageUrl() || imageToggle()) ? "50%" : "100%",
-									minWidth: (isImageLoading() || imageUrl() || imageToggle()) ? 0 : 800,
-									transition: "all 0.3s",
-								}}
-							>
+						<div style={{ display: "flex", gap: "1rem", alignItems: "flex-start", flexDirection: "row" }}>
+							<div style={{ flex: (isImageLoading() || imageUrl() || imageToggle()) ? "0 0 50%" : 1, maxWidth: (isImageLoading() || imageUrl() || imageToggle()) ? "50%" : "100%", minWidth: (isImageLoading() || imageUrl() || imageToggle()) ? 0 : 800, transition: "all 0.3s" }}>
 								{current() && (
 									<div style={{ margin: "12px 0 0 0" }}>
 										<div style={{ 
@@ -549,6 +536,29 @@ function App() {
 											</svg>
 										</span>
 									</button>
+									{imageToggle() && (
+										<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+											<select
+												id="image-style-select"
+												class="sidebar-style-select image-style-select-align"
+												value={imageStyle()}
+												onInput={e => setImageStyle(e.currentTarget.value)}
+											>
+												<option value="" disabled>Select Image Style</option>
+												<option value="photorealistic">Photorealistic</option>
+												<option value="cinematic">Cinematic</option>
+												<option value="digital-art">Digital Art</option>
+												<option value="watercolor">Watercolor</option>
+												<option value="oil-painting">Oil Painting</option>
+												<option value="anime">Anime</option>
+												<option value="fantasy">Fantasy</option>
+												<option value="minimalist">Minimalist</option>
+												<option value="vintage">Vintage</option>
+												<option value="ghibli">Ghibli</option>
+												<option value="cyberpunk">Cyberpunk</option>
+											</select>
+										</div>
+									)}
 									<input
 										type="text"
 										value={input()}
@@ -560,6 +570,7 @@ function App() {
 										}}
 										placeholder="Ask me anything..."
 										class="chat-input"
+										style={{ flex: 1 }}
 										disabled={isLoading()}
 									/>
 									<button
