@@ -331,6 +331,16 @@ function App() {
 												onInput={handleEdit}
 												style={{
 													height: imageUrl() ? '200px': '320px',
+													// minWidth: imageUrl() ? "0 !important" : "800px !important",
+													// minHeight: "200px",
+													// maxWidth: "100%",
+													// maxHeight: "600px",
+													// display: "block",
+													// margin: "0 auto",
+													// boxSizing: "border-box",
+													// transition: "all 0.3s",
+													// resize: "both",
+													// overflow: "auto",
 												}}
 												disabled={current().posted}
 											/>

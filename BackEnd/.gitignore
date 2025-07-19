@@ -1,7 +1,10 @@
+# Environment variables
 .env
 .env.local
 .env.production
 .env.staging
+
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -23,17 +26,23 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# Virtual environments (note: .venv is in root directory)
 ../.venv/
 venv/
 env/
 ENV/
 env.bak/
 venv.bak/
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+
+# OS
 .DS_Store
 .DS_Store?
 ._*
@@ -41,10 +50,16 @@ venv.bak/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Logs
 *.log
 logs/
+
+# Database
 *.db
 *.sqlite3
+
+# Coverage reports
 htmlcov/
 .tox/
 .coverage
